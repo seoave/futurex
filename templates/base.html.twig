@@ -8,6 +8,8 @@
     {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
+        <link href="{{ asset('assets/css/bulma.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet"/>
     {% endblock %}
 
     {% block javascripts %}
@@ -15,7 +17,84 @@
     {% endblock %}
 </head>
 <body>
-<h1>{{ title }}</h1>
-{% block body %}{% endblock %}
+{% block header %}
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{{ path('home') }}">
+                <img src="{{ asset('assets/images/logo.png') }}" width="" height="" alt="logo">
+            </a>
+
+            <a role="button"
+               class="navbar-burger"
+               aria-label="menu"
+               aria-expanded="false"
+               data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item">
+                    Home
+                </a>
+
+                <a class="navbar-item">
+                    Documentation
+                </a>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        More
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item">
+                            About
+                        </a>
+                        <a class="navbar-item">
+                            Jobs
+                        </a>
+                        <a class="navbar-item">
+                            Contact
+                        </a>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item">
+                            Report an issue
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="{{ path('registration_page') }}">
+                            <strong>Sign up</strong>
+                        </a>
+                        <a class="button is-light">
+                            Log in
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+{% block body %}
+    <section class="section">
+        <h1 class="title">{{ title }}</h1>
+        <h2 class="subtitle">
+            Token trading. Future Exchange.
+        </h2>
+    </section>
+{% endblock %}
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>(c) Futurex 2022</p>
+    </div>
+</footer>
 </body>
 </html>
