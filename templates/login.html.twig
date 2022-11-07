@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <section>
+        <h1 class="is-size-1 has-text-centered mb-6">{{ title }}</h1>
+        <form id="loginNewUser" class="register-login-form" action="" method="post">
+            <div class="field">
+                <label for="loginEmail" class="label">Email</label>
+                <div class="control has-icons-left">
+                    <input id="loginEmail"
+                           name="loginEmail"
+                           class="input"
+                           type="email"
+                           placeholder="Your email"
+                           value="">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label for="loginPassword" class="label">Password</label>
+                <div class="control has-icons-left">
+                    <input id="loginPassword"
+                           name="loginPassword"
+                           class="input"
+                           type="password"
+                    >
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field is-grouped mt-5">
+                <div class="control">
+                    <button class="button is-link">Login</button>
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}
