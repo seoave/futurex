@@ -13,7 +13,7 @@ class RegistrationPageController extends AbstractController
     #[Route('/registration', name: 'registration_page')]
     public function registration(): Response
     {
-        return $this->render('registration.html.twig', [
+        return $this->render('registration/index.html.twig', [
             'title' => 'Registration',
         ]);
     }

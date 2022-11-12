@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="section">
+            <h1 class="is-size-3 has-text-centered">{{ name }}</h1>
+            <div class="col1">
+                <form class="mb-4" action="" enctype="multipart/form-data" method="post">
+                    <div class="is-flex is-align-items-end">
+                        <figure class="image is-128x128 mr-6">
+                            <img src="https://bulma.io/images/placeholders/128x128.png" alt="">
+                        </figure>
+                        <div class="file is-light mr-4">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="avatar">
+                                <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Change avatar...
+                                </span>
+                            </span>
+                            </label>
+                        </div>
+                        <button class="button" type="submit" name="updateAvatar">Upload</button>
+                    </div>
+                </form>
+
+                <form action="" enctype="multipart/form-data" method="post">
+
+                    <div class="field">
+                        <label for="userName" class="label">Name</label>
+                        <div class="control">
+                            <input id="userName" name="userName" class="input" type="text" placeholder="Your name"
+                                   value="{{ name }}">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="userEmail" class="label">Email</label>
+                        <div class="control has-icons-left">
+                            <input id="userEmail" name="userEmail" class="input" type="email" placeholder="Email input"
+                                   value="{{ email }}" disabled>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="userPassword" class="label">Password</label>
+                        <div class="control has-icons-left">
+                            <input id="userPassword" name="userPassword" class="input" type="password">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="userEmail" class="label">Gender</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="userGender" checked>
+                                Man
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="userGender">
+                                Woman
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="submit" class="button is-primary" name="updateUser">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

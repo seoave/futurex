@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     public function homepage(): Response
     {
         return $this->render('base.html.twig', [
-            'title' => 'HomepageTitle',
+            'title' => 'FUTUREX',
         ]);
     }
 }

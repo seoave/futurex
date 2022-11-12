@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -12,7 +13,7 @@ class LoginPageController extends AbstractController
     #[Route('/login', name: 'login')]
     public function login(): Response
     {
-        return $this->render('login.html.twig', [
+        return $this->render('login/index.html.twig', [
             'title' => 'Login',
         ]);
     }
