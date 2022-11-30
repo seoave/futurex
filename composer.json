@@ -9,12 +9,17 @@
         "ext-iconv": "*",
         "predis/predis": "^2.0",
         "symfony/apache-pack": "^1.0",
+        "symfony/asset": "6.1.*",
         "symfony/console": "6.1.*",
         "symfony/dotenv": "6.1.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.1.*",
         "symfony/runtime": "6.1.*",
-        "symfony/yaml": "6.1.*"
+        "symfony/templating": "6.1.*",
+        "symfony/twig-bundle": "6.1.*",
+        "symfony/yaml": "6.1.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {

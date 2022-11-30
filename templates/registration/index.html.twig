@@ -1,0 +1,49 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <section>
+        <h1 class="is-size-1 has-text-centered mb-6">{{ title }}</h1>
+        <form id="registerNewUser" class="register-login-form" action="" method="post">
+            <div class="field">
+                <label for="registerName" class="label">Name</label>
+                <div class="control has-icons-left">
+                    <input id="registerName" name="registerName" class="input" type="text" placeholder="Your name">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label for="registerEmail" class="label">Email</label>
+                <div class="control has-icons-left">
+                    <input id="registerEmail"
+                           name="registerEmail"
+                           class="input"
+                           type="email"
+                           placeholder="Your email"
+                           value="">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label for="registerPassword" class="label">Password</label>
+                <div class="control has-icons-left">
+                    <input id="registerPassword"
+                           name="registerPassword"
+                           class="input"
+                           type="password"
+                    >
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field is-grouped mt-5">
+                <div class="control">
+                    <button class="button is-link">Register</button>
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}

@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController
+class HomeController extends AbstractController
 {
     #[Route('/', name: 'home')]
     public function homepage(): Response
     {
-        return new Response('home 13555');
+        return $this->render('base.html.twig', [
+            'title' => 'FUTUREX',
+        ]);
     }
 }

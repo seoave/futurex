@@ -1,0 +1,8 @@
+.main-content {
+    min-height: calc(100vh - 224px);
+}
+
+.register-login-form {
+    max-width: 425px;
+    margin: 0 auto;
+}
