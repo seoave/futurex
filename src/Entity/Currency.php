@@ -2,11 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\CurrenciesRepository;
+use App\Repository\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[ORM\Entity(repositoryClass: CurrenciesRepository::class)]
-class Currencies
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: CurrencyRepository::class)]
+#[UniqueEntity(
+    fields: ['code'],
+    errorPath: 'code',
+    message: 'This code is already in use.',
+)]
+class Currency
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,7 +24,7 @@ class Currencies
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 3)]
+    #[ORM\Column(name: 'code',length: 3, unique: true)]
     private ?string $code = null;
 
     public function getId(): ?int

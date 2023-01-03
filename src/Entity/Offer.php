@@ -5,8 +5,8 @@ namespace App\Entity;
 use App\Repository\OffersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: OffersRepository::class)]
-class Offers
+#[ORM\Entity(repositoryClass: OfferRepository::class)]
+class Offer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
