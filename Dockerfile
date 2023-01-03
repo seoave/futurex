@@ -42,6 +42,10 @@ RUN set -eux; \
     	zip \
     	apcu \
 		opcache \
+        redis \
+        pdo \
+        pdo_pgsql \
+        pgsql \
     ;
 
 ###> recipes ###
