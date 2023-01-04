@@ -9,11 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
-#[UniqueEntity(
-    fields: ['code'],
-    errorPath: 'code',
-    message: 'This code is already in use.',
-)]
+#[UniqueEntity('code')]
 class Currency
 {
     #[ORM\Id]

@@ -20,9 +20,6 @@ class Offer
     private ?int $date = null;
 
     #[ORM\Column]
-    private ?int $currencyId = null;
-
-    #[ORM\Column]
     private ?float $amount = null;
 
     #[ORM\Column(length: 7)]
@@ -36,6 +33,10 @@ class Offer
 
     #[ORM\Column(length: 5)]
     private ?string $offerType = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Currency $currencyId = null;
 
     public function getId(): ?int
     {
