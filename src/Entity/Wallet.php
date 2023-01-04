@@ -12,12 +12,17 @@ class Wallet
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    #[ORM\Column]
-    private ?int $userId = null;
-    #[ORM\Column]
-    private ?int $currencyId = null;
+
     #[ORM\Column(options: ['default' => 0])]
     private ?float $amount = 0;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $userId = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Currency $currencyId = null;
 
     public function getId(): ?int
     {
