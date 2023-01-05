@@ -9,7 +9,7 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^1.14",
         "doctrine/doctrine-bundle": "^2.7",
-        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.14",
         "predis/predis": "^2.0",
         "symfony/apache-pack": "^1.0",
