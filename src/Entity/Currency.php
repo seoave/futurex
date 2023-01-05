@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use App\Repository\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
+#[UniqueEntity('code')]
 class Currency
 {
     #[ORM\Id]
@@ -13,7 +15,7 @@ class Currency
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 3)]
+    #[ORM\Column(length: 3, unique: true)]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
