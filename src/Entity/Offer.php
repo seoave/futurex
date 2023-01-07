@@ -2,30 +2,32 @@
 
 namespace App\Entity;
 
-use App\Repository\OffersRepository;
+use App\Repository\OfferRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: OffersRepository::class)]
-class Offers
+#[ORM\Entity(repositoryClass: OfferRepository::class)]
+class Offer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $userId = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $userId = null;
 
     #[ORM\Column]
-    private ?int $date = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private ?int $currencyId = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Currency $currencyId = null;
 
     #[ORM\Column]
     private ?float $amount = null;
 
-    #[ORM\Column(length: 7)]
+    #[ORM\Column(length: 10)]
     private ?string $orderType = null;
 
     #[ORM\Column]
@@ -34,7 +36,7 @@ class Offers
     #[ORM\Column]
     private ?float $stock = null;
 
-    #[ORM\Column(length: 5)]
+    #[ORM\Column(length: 10)]
     private ?string $offerType = null;
 
     public function getId(): ?int
@@ -42,36 +44,36 @@ class Offers
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): ?User
     {
         return $this->userId;
     }
 
-    public function setUserId(int $userId): self
+    public function setUserId(?User $userId): self
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    public function getDate(): ?int
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->date;
+        return $this->createdAt;
     }
 
-    public function setDate(int $date): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
-        $this->date = $date;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCurrencyId(): ?int
+    public function getCurrencyId(): ?Currency
     {
         return $this->currencyId;
     }
 
-    public function setCurrencyId(int $currencyId): self
+    public function setCurrencyId(?Currency $currencyId): self
     {
         $this->currencyId = $currencyId;
 

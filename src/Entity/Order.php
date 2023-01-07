@@ -2,40 +2,43 @@
 
 namespace App\Entity;
 
-use App\Repository\OrdersRepository;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: OrdersRepository::class)]
-class Orders
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: '`order`')]
+class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $acceptorId = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $acceptorId = null;
 
     #[ORM\Column]
     private ?float $amount = null;
 
     #[ORM\Column]
-    private ?int $date = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private ?int $offerId = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Offer $offerId = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAcceptorId(): ?int
+    public function getAcceptorId(): ?User
     {
         return $this->acceptorId;
     }
 
-    public function setAcceptorId(int $acceptorId): self
+    public function setAcceptorId(?User $acceptorId): self
     {
         $this->acceptorId = $acceptorId;
 
@@ -54,24 +57,24 @@ class Orders
         return $this;
     }
 
-    public function getDate(): ?int
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->date;
+        return $this->createdAt;
     }
 
-    public function setDate(int $date): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
-        $this->date = $date;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getOfferId(): ?int
+    public function getOfferId(): ?Offer
     {
         return $this->offerId;
     }
 
-    public function setOfferId(int $offerId): self
+    public function setOfferId(?Offer $offerId): self
     {
         $this->offerId = $offerId;
 

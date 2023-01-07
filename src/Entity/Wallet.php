@@ -12,36 +12,41 @@ class Wallet
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $userId = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Currency $currencyId = null;
+
     #[ORM\Column]
-    private ?int $userId = null;
-    #[ORM\Column]
-    private ?int $currencyId = null;
-    #[ORM\Column(options: ['default' => 0])]
-    private ?float $amount = 0;
+    private ?float $amount = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): ?User
     {
         return $this->userId;
     }
 
-    public function setUserId(int $userId): self
+    public function setUserId(?User $userId): self
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    public function getCurrencyId(): ?int
+    public function getCurrencyId(): ?Currency
     {
         return $this->currencyId;
     }
 
-    public function setCurrencyId(int $currencyId): self
+    public function setCurrencyId(?Currency $currencyId): self
     {
         $this->currencyId = $currencyId;
 

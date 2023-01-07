@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\UsersRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
+#[UniqueEntity('email')]
+class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,22 +20,23 @@ class Users
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $phone = null;
 
-    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[ORM\Column]
     private ?int $gender = null;
 
     #[ORM\Column]
-    private ?int $birthday = null;
+    private ?\DateTimeImmutable $bornAt = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 100)]
     private ?string $role = null;
 
     #[ORM\Column(length: 5, nullable: true)]
@@ -84,21 +88,21 @@ class Users
         return $this->gender;
     }
 
-    public function setGender(?int $gender): self
+    public function setGender(int $gender): self
     {
         $this->gender = $gender;
 
         return $this;
     }
 
-    public function getBirthday(): ?int
+    public function getBornAt(): ?\DateTimeImmutable
     {
-        return $this->birthday;
+        return $this->bornAt;
     }
 
-    public function setBirthday(int $birthday): self
+    public function setBornAt(\DateTimeImmutable $bornAt): self
     {
-        $this->birthday = $birthday;
+        $this->bornAt = $bornAt;
 
         return $this;
     }
