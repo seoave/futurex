@@ -15,14 +15,14 @@ class Offer
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $userId = null;
+    private ?User $user = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Currency $currencyId = null;
+    private ?Currency $currency = null;
 
     #[ORM\Column]
     private ?float $amount = null;
@@ -48,14 +48,14 @@ class Offer
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(?User $userId): self
+    public function setUser(?User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -72,14 +72,14 @@ class Offer
         return $this;
     }
 
-    public function getCurrencyId(): ?Currency
+    public function getCurrency(): ?Currency
     {
-        return $this->currencyId;
+        return $this->currency;
     }
 
-    public function setCurrencyId(?Currency $currencyId): self
+    public function setCurrency(?Currency $currency): self
     {
-        $this->currencyId = $currencyId;
+        $this->currency = $currency;
 
         return $this;
     }
