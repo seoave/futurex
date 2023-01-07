@@ -39,6 +39,10 @@ class Offer
     #[ORM\Column(length: 10)]
     private ?string $offerType = null;
 
+    #[ORM\ManyToOne(inversedBy: 'offers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Currency $exchangedCurrency = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +140,18 @@ class Offer
     public function setOfferType(string $offerType): self
     {
         $this->offerType = $offerType;
+
+        return $this;
+    }
+
+    public function getExchangedCurrency(): ?Currency
+    {
+        return $this->exchangedCurrency;
+    }
+
+    public function setExchangedCurrency(?Currency $exchangedCurrency): self
+    {
+        $this->exchangedCurrency = $exchangedCurrency;
 
         return $this;
     }
