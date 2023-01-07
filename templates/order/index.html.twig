@@ -5,24 +5,69 @@
             <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
             <div class="col1">
 
-                <div class="buttons">
-                    <a href="#" class="button is-primary">Create order</a>
-                </div>
+                <form action="" method="post">
 
-                <div class="orders-list">
-                    <h3 class="is-size-4">Open orders</h3>
-                    <ul>
-                        <li>Order 4</li>
-                        <li>Order 5</li>
-                        <li>Order 6</li>
-                    </ul>
-                    <h3 class="is-size-4">Last closed orders</h3>
-                    <ul>
-                        <li>Order 1</li>
-                        <li>Order 2</li>
-                        <li>Order 3</li>
-                    </ul>
-                </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="type" value="buy" checked>
+                                Buy
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="type" value="sell">
+                                Sell
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Offer token</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="offerToken">
+                                    <option value="" disabled selected>Select token</option>
+                                    <option value="btc">BTC</option>
+                                    <option value="etc">ETH</option>
+                                    <option value="ltc">LTC</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Amount</label>
+                        <div class="control">
+                            <input name="amount" class="input" type="number" step="any" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Exchanged token/currency</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="exchangedToken">
+                                    <option value="" disabled selected>Select token/currency</option>
+                                    <option value="usd">USD</option>
+                                    <option value="etc">ETH</option>
+                                    <option value="ltc">LTC</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Rate</label>
+                        <div class="control">
+                            <input name="rate" step="any" class="input" type="number" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="submit" class="button is-primary" name="createOrder">Create</button>
+                        </div>
+                    </div>
+
+                </form>
 
             </div>
         </div>
