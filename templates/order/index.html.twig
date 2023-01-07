@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="section">
+            <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
+            <div class="col1">
+
+                <div class="buttons">
+                    <a href="#" class="button is-primary">Create order</a>
+                </div>
+
+                <div class="orders-list">
+                    <h3 class="is-size-4">Open orders</h3>
+                    <ul>
+                        <li>Order 4</li>
+                        <li>Order 5</li>
+                        <li>Order 6</li>
+                    </ul>
+                    <h3 class="is-size-4">Last closed orders</h3>
+                    <ul>
+                        <li>Order 1</li>
+                        <li>Order 2</li>
+                        <li>Order 3</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
