@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OfferRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
@@ -20,12 +20,15 @@ class Offer
     private ?\DateTimeImmutable $createdAt = null;
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?Currency $currency = null;
     #[ORM\Column]
+    #[Assert\Positive]
     private ?float $amount = null;
     #[ORM\Column(length: 10)]
     private ?string $orderType = null;
     #[ORM\Column]
+    #[Assert\Positive]
     private ?float $rate = null;
     #[ORM\Column]
     private ?float $stock = null;
