@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Positive;
 
 class CreateOrderFormType extends AbstractType
@@ -38,6 +39,8 @@ class CreateOrderFormType extends AbstractType
                     return $currency ? $currency->getId() : '';
                 },
                 'placeholder' => 'Choose a Token',
+                'required' => false,
+                'constraints' => [new NotNull()],
             ])
             ->add('amount', NumberType::class, [
                 'constraints' => [new Positive()],
@@ -55,6 +58,8 @@ class CreateOrderFormType extends AbstractType
                 'class' => Currency::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Choose a Currency/Token',
+                'constraints' => [new NotNull()],
+                'required' => false,
             ])
             ->add('send', SubmitType::class, [
                 'attr' => ['class' => 'button is-primary'],

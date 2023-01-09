@@ -20,7 +20,7 @@ class Offer
     private ?\DateTimeImmutable $createdAt = null;
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private ?Currency $currency = null;
     #[ORM\Column]
     #[Assert\Positive]
@@ -36,6 +36,7 @@ class Offer
     private ?string $offerType = null;
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?Currency $exchangedCurrency = null;
 
     public function __construct()
