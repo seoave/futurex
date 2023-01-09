@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OfferRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
@@ -12,36 +13,33 @@ class Offer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Currency $currency = null;
-
     #[ORM\Column]
     private ?float $amount = null;
-
     #[ORM\Column(length: 10)]
     private ?string $orderType = null;
-
     #[ORM\Column]
     private ?float $rate = null;
-
     #[ORM\Column]
     private ?float $stock = null;
-
     #[ORM\Column(length: 10)]
     private ?string $offerType = null;
-
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Currency $exchangedCurrency = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->orderType = 'draft';
+    }
 
     public function getId(): ?int
     {
