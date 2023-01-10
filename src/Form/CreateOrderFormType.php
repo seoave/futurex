@@ -23,8 +23,15 @@ class CreateOrderFormType extends AbstractType
                     'Buy' => 'buy',
                     'Sell' => 'sell',
                 ],
+                'choice_attr' => [
+                    'Buy' => ['class' => 'mr-1'],
+                    'Sell' => ['class' => 'mr-1 ml-3'],
+                ],
                 'data' => 'buy',
                 'expanded' => true,
+                'attr' => ['class' => 'radio-btn-group'],
+                'row_attr' => ['class' => 'field'],
+                'label_attr' => ['class' => 'label'],
             ])
             ->add('currency', EntityType::class, [
                 'class' => Currency::class,
@@ -33,7 +40,6 @@ class CreateOrderFormType extends AbstractType
                         ->select('c')
                         ->where('c.token = true');
                 },
-                'invalid_message' => 'That is not a valid currency id',
                 'choice_label' => 'name',
                 'choice_value' => function (?Currency $currency) {
                     return $currency ? $currency->getId() : '';
@@ -41,18 +47,26 @@ class CreateOrderFormType extends AbstractType
                 'placeholder' => 'Choose a Token',
                 'required' => false,
                 'constraints' => [new NotNull()],
+                'row_attr' => ['class' => 'field'],
+                'label_attr' => ['class' => 'label'],
             ])
             ->add('amount', NumberType::class, [
                 'constraints' => [new Positive()],
                 'scale' => 7,
                 'data' => 0,
                 'required' => false,
+                'attr' => ['class' => 'input'],
+                'row_attr' => ['class' => 'field'],
+                'label_attr' => ['class' => 'label'],
             ])
             ->add('rate', NumberType::class, [
                 'scale' => 7,
                 'data' => 0,
                 'required' => false,
                 'constraints' => [new Positive()],
+                'attr' => ['class' => 'input'],
+                'row_attr' => ['class' => 'field'],
+                'label_attr' => ['class' => 'label'],
             ])
             ->add('exchangedCurrency', EntityType::class, [
                 'class' => Currency::class,
@@ -60,10 +74,13 @@ class CreateOrderFormType extends AbstractType
                 'placeholder' => 'Choose a Currency/Token',
                 'constraints' => [new NotNull()],
                 'required' => false,
+                'row_attr' => ['class' => 'field'],
+                'label_attr' => ['class' => 'label'],
             ])
             ->add('send', SubmitType::class, [
                 'attr' => ['class' => 'button is-primary'],
                 'label' => 'Create',
+                'row_attr' => ['class' => 'field'],
             ]);
     }
 }

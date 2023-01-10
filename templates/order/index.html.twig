@@ -5,71 +5,32 @@
             <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
             <div class="col1">
 
-                <form action="" method="post">
+                {{ form_start(form) }}
 
-                    <div class="field">
-                        <div class="control">
-                            <label class="radio">
-                                <input type="radio" name="type" value="buy" checked>
-                                Buy
-                            </label>
-                            <label class="radio">
-                                <input type="radio" name="type" value="sell">
-                                Sell
-                            </label>
-                        </div>
+                {{ form_row(form.offerType) }}
+
+                <div class="field">
+                    {{ form_label(form.currency) }}
+                    {{ form_errors(form.currency) }}
+                    <div class="select">
+                        {{ form_widget(form.currency) }}
                     </div>
+                </div>
 
-                    <div class="field">
-                        <label class="label">Offer token</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="offerToken">
-                                    <option value="" disabled selected>Select token</option>
-                                    <option value="btc">BTC</option>
-                                    <option value="etc">ETH</option>
-                                    <option value="ltc">LTC</option>
-                                </select>
-                            </div>
-                        </div>
+                {{ form_row(form.amount) }}
+                {{ form_row(form.rate) }}
+
+                <div class="field">
+                    {{ form_label(form.exchangedCurrency) }}
+                    {{ form_errors(form.exchangedCurrency) }}
+
+                    <div class="select">
+                        {{ form_widget(form.exchangedCurrency) }}
                     </div>
+                </div>
+                {{ form_row(form.send) }}
 
-                    <div class="field">
-                        <label class="label">Amount</label>
-                        <div class="control">
-                            <input name="amount" class="input" type="number" step="any" placeholder="0">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Exchanged token/currency</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="exchangedToken">
-                                    <option value="" disabled selected>Select token/currency</option>
-                                    <option value="usd">USD</option>
-                                    <option value="etc">ETH</option>
-                                    <option value="ltc">LTC</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Rate</label>
-                        <div class="control">
-                            <input name="rate" step="any" class="input" type="number" placeholder="0">
-                        </div>
-                    </div>
-
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <button type="submit" class="button is-primary" name="createOrder">Create</button>
-                        </div>
-                    </div>
-
-                </form>
-
-                {{ form(form) }}
+                {{ form_end(form) }}
 
             </div>
         </div>
