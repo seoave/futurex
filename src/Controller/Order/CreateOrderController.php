@@ -5,6 +5,7 @@ namespace App\Controller\Order;
 use App\Entity\Offer;
 use App\Entity\User;
 use App\Form\CreateOrderFormType;
+use App\Service\DataTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,17 +31,15 @@ class CreateOrderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            $offer = new Offer();
-            $offer->setUser($user);
-            $offer->setCurrency($formData['currency']);
-            $offer->setExchangedCurrency($formData['exchangedCurrency']);
-            $offer->setAmount($formData['amount']);
-            $offer->setRate($formData['rate']);
-            $offer->setStock($formData['amount']);
-            $offer->setOfferType($formData['offerType']);
+
+            var_dump($formData);
+
+            $offer = DataTransformer::formToOffer($formData, $user);
 
             $this->em->persist($offer);
             $this->em->flush();
+
+            return $this->redirectToRoute('trade');
         }
 
         return $this->render('order/index.html.twig', [

@@ -46,12 +46,18 @@ class CreateOrderFormType extends AbstractType
                 },
                 'placeholder' => 'Choose a Token',
                 'required' => false,
-                'constraints' => [new NotNull()],
+                'constraints' => [
+                    new NotNull([
+                        'message' => 'Choose currency!',
+                    ]),
+                ],
                 'row_attr' => ['class' => 'field'],
                 'label_attr' => ['class' => 'label'],
             ])
             ->add('amount', NumberType::class, [
-                'constraints' => [new Positive()],
+                'constraints' => [new Positive([
+                    'message'=>'Add token amount!'
+                ])],
                 'scale' => 7,
                 'data' => 0,
                 'required' => false,
@@ -63,7 +69,9 @@ class CreateOrderFormType extends AbstractType
                 'scale' => 7,
                 'data' => 0,
                 'required' => false,
-                'constraints' => [new Positive()],
+                'constraints' => [new Positive([
+                    'message'=>'Add rate!'
+                ])],
                 'attr' => ['class' => 'input'],
                 'row_attr' => ['class' => 'field'],
                 'label_attr' => ['class' => 'label'],
@@ -72,7 +80,11 @@ class CreateOrderFormType extends AbstractType
                 'class' => Currency::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Choose a Currency/Token',
-                'constraints' => [new NotNull()],
+                'constraints' => [
+                    new NotNull([
+                        'message' => 'Choose currency!',
+                    ]),
+                ],
                 'required' => false,
                 'row_attr' => ['class' => 'field'],
                 'label_attr' => ['class' => 'label'],

@@ -10,18 +10,50 @@
                 </div>
 
                 <div class="orders-list">
-                    <h3 class="is-size-4">Open orders</h3>
-                    <ul>
-                        <li>Order 4</li>
-                        <li>Order 5</li>
-                        <li>Order 6</li>
-                    </ul>
-                    <h3 class="is-size-4">Last closed orders</h3>
-                    <ul>
-                        <li>Order 1</li>
-                        <li>Order 2</li>
-                        <li>Order 3</li>
-                    </ul>
+                    <h3 class="is-size-4">{{ offers | length }} Orders</h3>
+
+                    <table class="table is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>status</th>
+                            <th>offer id</th>
+                            <th>type</th>
+                            <th>currency</th>
+                            <th>amount</th>
+                            <th>rate</th>
+                            <th>exchanged</th>
+                            <th>date</th>
+                            <th>action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for offer in offers %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ offer.orderType }}</td>
+                                <td>{{ offer.id }}</td>
+                                <td>{{ offer.offerType }}</td>
+                                <td>{{ offer.currency.name }}</td>
+                                <td>{{ offer.amount }}</td>
+                                <td>{{ offer.rate }}</td>
+                                <td>{{ offer.exchangedCurrency.name }}</td>
+                                <td>{{ offer.createdAt | date("d/m/y H:i") }}</td>
+                                <td>
+                                    {% if offer.orderType == 'draft' %}
+                                        <a href="/order/open/{{ offer.id }}" class="button is-primary">Open</a>
+                                    {% endif %}
+                                    {% if offer.orderType == 'open' %}
+                                        <a href="#" class="button is-warning">Close</a>
+                                    {% endif %}
+                                    {% if offer.orderType == 'draft' %}
+                                        <a href="/order/delete/{{ offer.id }}" class="button is-danger">Delete</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
