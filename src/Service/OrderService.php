@@ -48,11 +48,7 @@ class OrderService
      */
     public function close(int $id): void
     {
-        $offer = $this->offerRepository->find($id);
-
-        if ($offer === null) {
-            throw new EntityNotFoundException(self::ENTITYNOTFOUND);
-        }
+        $offer = $this->getOffer($id);
 
         if ($offer->getAmount() === $offer->getStock()) {
             $offer->setOrderType('draft');
@@ -68,11 +64,7 @@ class OrderService
      */
     public function delete(int $id): void
     {
-        $offer = $this->offerRepository->find($id);
-
-        if ($offer === null) {
-            throw new EntityNotFoundException(self::ENTITYNOTFOUND);
-        }
+        $offer = $this->getOffer($id);
 
         if ($offer->getOrderType() === 'draft') {
             $this->offerRepository->remove($offer, true);
