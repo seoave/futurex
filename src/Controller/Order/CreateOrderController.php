@@ -2,7 +2,6 @@
 
 namespace App\Controller\Order;
 
-use App\Entity\Offer;
 use App\Entity\User;
 use App\Form\CreateOrderFormType;
 use App\Service\DataTransformer;

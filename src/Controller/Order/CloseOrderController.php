@@ -3,34 +3,22 @@ declare(strict_types=1);
 
 namespace App\Controller\Order;
 
-use App\Repository\OfferRepository;
-use Doctrine\ORM\EntityNotFoundException;
+use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CloseOrderController extends AbstractController
 {
     public function __construct(
-        private readonly OfferRepository $offerRepository
+        private readonly OrderService $orderService
     ) {
     }
 
     #[Route('/order/close/{id}', name: 'app_order_close')]
-    public function index(int $id)
+    public function index(int $id): RedirectResponse
     {
-        $offer = $this->offerRepository->find($id);
-
-        if ($offer === null) {
-            throw new EntityNotFoundException('Offer not found');
-        }
-
-        if ($offer->getAmount() === $offer->getStock()) {
-            $offer->setOrderType('draft');
-            $this->offerRepository->save($offer, true);
-        } else {
-            $offer->setOrderType('close');
-            $this->offerRepository->save($offer, true);
-        }
+        $this->orderService->close($id);
 
         return $this->redirectToRoute('trade');
     }
