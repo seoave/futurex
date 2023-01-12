@@ -32,8 +32,6 @@ class CreateOrderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
 
-            var_dump($formData);
-
             $offer = DataTransformer::formToOffer($formData, $user);
 
             $this->em->persist($offer);

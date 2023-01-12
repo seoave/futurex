@@ -10,9 +10,10 @@
                 </div>
 
                 <div class="orders-list">
-                    <h3 class="is-size-4">{{ offers | length }} Orders</h3>
+                    <h3 class="is-size-4">Orders</h3>
 
                     <table class="table is-hoverable">
+                        <caption>Total {{ offers | length }} Orders</caption>
                         <thead>
                         <tr>
                             <th>#</th>
@@ -22,6 +23,7 @@
                             <th>currency</th>
                             <th>amount</th>
                             <th>rate</th>
+                            <th>stock</th>
                             <th>exchanged</th>
                             <th>date</th>
                             <th>action</th>
@@ -37,6 +39,7 @@
                                 <td>{{ offer.currency.name }}</td>
                                 <td>{{ offer.amount }}</td>
                                 <td>{{ offer.rate }}</td>
+                                <td>{{ offer.stock }}</td>
                                 <td>{{ offer.exchangedCurrency.name }}</td>
                                 <td>{{ offer.createdAt | date("d/m/y H:i") }}</td>
                                 <td>
@@ -44,7 +47,8 @@
                                         <a href="/order/open/{{ offer.id }}" class="button is-primary">Open</a>
                                     {% endif %}
                                     {% if offer.orderType == 'open' %}
-                                        <a href="#" class="button is-warning">Close</a>
+                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        is-warning">Close</a>
                                     {% endif %}
                                     {% if offer.orderType == 'draft' %}
                                         <a href="/order/delete/{{ offer.id }}" class="button is-danger">Delete</a>
