@@ -20,10 +20,12 @@ class UserTrading extends AbstractController
     {
         $repository = $this->em->getRepository(Offer::class);
         $offers = $repository->findBy([], ['id' => 'DESC']);
+        $matchingOffers = $repository->findAllEqualOrLessThanRate(5000);
 
         return $this->render('trade/index.html.twig', [
             'title' => 'Trade',
             'offers' => $offers,
+            'matchingOffers' => $matchingOffers,
         ]);
     }
 }

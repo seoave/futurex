@@ -39,6 +39,21 @@ class OfferRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllEqualOrLessThanRate(float $rate): array
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT offer
+                 FROM App\Entity\Offer offer
+                 WHERE offer.rate <= :rate AND offer.orderType = :open
+                 ORDER BY offer.rate ASC'
+        )->setParameter('rate', $rate)
+            ->setParameter('open', 'open');
+
+        return $query->getResult();
+    }
+
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */

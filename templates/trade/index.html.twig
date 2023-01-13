@@ -10,7 +10,52 @@
                 </div>
 
                 <div class="orders-list">
-                    <h3 class="is-size-4">Orders</h3>
+                    <h3 class="is-size-4">Matching orders</h3>
+                    <table class="table is-hoverable">
+                        <caption>Total {{ matchingOffers | length }} Orders</caption>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>status</th>
+                            <th>offer id</th>
+                            <th>type</th>
+                            <th>currency</th>
+                            <th>amount</th>
+                            <th>rate</th>
+                            <th>stock</th>
+                            <th>exchanged</th>
+                            <th>date</th>
+                            <th>action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for matchOffer in matchingOffers %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ matchOffer.orderType }}</td>
+                                <td>{{ matchOffer.id }}</td>
+                                <td>{{ matchOffer.offerType }}</td>
+                                <td>{{ matchOffer.currency.name }}</td>
+                                <td>{{ matchOffer.amount }}</td>
+                                <td>{{ matchOffer.rate }}</td>
+                                <td>{{ matchOffer.stock }}</td>
+                                <td>{{ matchOffer.exchangedCurrency.name }}</td>
+                                <td>{{ matchOffer.createdAt | date("d/m/y H:i") }}</td>
+                                <td>
+                                    {% if matchOffer.orderType == 'open' %}
+                                        <a href="/order/pay/{{ matchOffer.id }}" class="button is-link">
+                                            Accept and Pay
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="orders-list">
+                    <h3 class="is-size-4">My orders</h3>
 
                     <table class="table is-hoverable">
                         <caption>Total {{ offers | length }} Orders</caption>
