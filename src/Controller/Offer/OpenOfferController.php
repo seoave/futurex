@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Order;
+namespace App\Controller\Offer;
 
-use App\Service\OrderService;
+use App\Service\OfferService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class OpenOrderController extends AbstractController
+class OpenOfferController extends AbstractController
 {
     public function __construct(
-        private readonly OrderService $orderService
+        private readonly OfferService $service
     ) {
     }
 
     #[Route('/order/open/{id}', name: 'app_order_open')]
     public function open(int $id): RedirectResponse
     {
-        $this->orderService->open($id);
+        $this->service->open($id);
 
         return $this->redirectToRoute('trade');
     }

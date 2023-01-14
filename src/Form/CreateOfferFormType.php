@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Positive;
 
-class CreateOrderFormType extends AbstractType
+class CreateOfferFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
