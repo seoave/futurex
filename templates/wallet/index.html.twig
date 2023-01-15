@@ -12,7 +12,34 @@
 
                 <section class="section">
                     <h3 class="is-size-5">Tokens</h3>
-                    <p>You have no tokens.</p>
+                    {% if tokens %}
+                        <table class="table is-hoverable">
+                            <caption>Total tokens in wallet: {{ tokens | length }}</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>name</th>
+                                <th>amount</th>
+                                <th>action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for token in tokens %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ token.name }}</td>
+                                    <td>{{ token.amount }}</td>
+                                    <td>
+                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        is-warning">Exchange</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>You have no tokens.</p>
+                    {% endif %}
                 </section>
                 <section class="section">
                     <h3 class="is-size-5">Currencies</h3>

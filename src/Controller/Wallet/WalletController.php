@@ -15,6 +15,7 @@ class WalletController extends AbstractController
         return $this->render('wallet/index.html.twig', [
             'title' => 'My Wallet',
             'currencies' => [],
+            'tokens' => [],
         ]);
     }
 }
