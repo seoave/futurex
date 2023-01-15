@@ -64,7 +64,7 @@ class OfferService
             $type = 'draft';
         }
 
-        if ($stock == 0) {
+        if ((int) $stock === 0) {
             $type = 'closed';
         }
 
