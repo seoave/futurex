@@ -29,30 +29,6 @@ class Wallet
         return $this->id;
     }
 
-    public function getUserId(): ?User
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(?User $userId): self
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    public function getCurrencyId(): ?Currency
-    {
-        return $this->currencyId;
-    }
-
-    public function setCurrencyId(?Currency $currencyId): self
-    {
-        $this->currencyId = $currencyId;
-
-        return $this;
-    }
-
     public function getAmount(): ?float
     {
         return $this->amount;

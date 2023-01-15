@@ -6,10 +6,45 @@
             <div class="col1">
 
                 <div class="buttons">
-                    <a href="#" class="button is-primary">Add to deposit</a>
-                    <a href="#" class="button is-primary">Take from deposit</a>
+                    <a href="#" class="button is-primary">Add to Wallet</a>
+                    <a href="#" class="button is-warning">Withdraw from Wallet</a>
                 </div>
 
+                <section class="section">
+                    <h3 class="is-size-5">Tokens</h3>
+                    <p>You have no tokens.</p>
+                </section>
+                <section class="section">
+                    <h3 class="is-size-5">Currencies</h3>
+                    {% if currencies %}
+                        <table class="table is-hoverable">
+                            <caption>Total currencies in wallet: {{ currencies | length }}</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>name</th>
+                                <th>amount</th>
+                                <th>action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for currency in currencies %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ currency.name }}</td>
+                                    <td>{{ currency.amount }}</td>
+                                    <td>
+                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        is-warning">Withdraw</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>You have no currencies.</p>
+                    {% endif %}
+                </section>
             </div>
         </div>
     </div>
