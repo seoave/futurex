@@ -21,6 +21,9 @@ class Currency
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column]
+    private ?bool $token = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +49,18 @@ class Currency
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function isToken(): ?bool
+    {
+        return $this->token;
+    }
+
+    public function setToken(bool $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
