@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OfferRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
@@ -12,46 +13,51 @@ class Offer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $userId = null;
-
+    private ?User $user = null;
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Currency $currencyId = null;
-
+    #[Assert\NotNull]
+    private ?Currency $currency = null;
     #[ORM\Column]
+    #[Assert\Positive]
     private ?float $amount = null;
-
     #[ORM\Column(length: 10)]
     private ?string $orderType = null;
-
     #[ORM\Column]
+    #[Assert\Positive]
     private ?float $rate = null;
-
     #[ORM\Column]
     private ?float $stock = null;
-
     #[ORM\Column(length: 10)]
     private ?string $offerType = null;
+    #[ORM\ManyToOne(inversedBy: 'offers')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
+    private ?Currency $exchangedCurrency = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->orderType = 'draft';
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(?User $userId): self
+    public function setUser(?User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -68,14 +74,14 @@ class Offer
         return $this;
     }
 
-    public function getCurrencyId(): ?Currency
+    public function getCurrency(): ?Currency
     {
-        return $this->currencyId;
+        return $this->currency;
     }
 
-    public function setCurrencyId(?Currency $currencyId): self
+    public function setCurrency(?Currency $currency): self
     {
-        $this->currencyId = $currencyId;
+        $this->currency = $currency;
 
         return $this;
     }
@@ -136,6 +142,18 @@ class Offer
     public function setOfferType(string $offerType): self
     {
         $this->offerType = $offerType;
+
+        return $this;
+    }
+
+    public function getExchangedCurrency(): ?Currency
+    {
+        return $this->exchangedCurrency;
+    }
+
+    public function setExchangedCurrency(?Currency $exchangedCurrency): self
+    {
+        $this->exchangedCurrency = $exchangedCurrency;
 
         return $this;
     }
