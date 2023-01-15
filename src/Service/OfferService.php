@@ -36,19 +36,8 @@ class OfferService
 
         $amount = $offer->getAmount();
         $stock = $offer->getStock();
-        $type = '';
 
-        if ($stock === $amount) {
-            $type = 'draft';
-        }
-
-        if ($stock === 0) {
-            $type = 'close';
-        }
-
-        if ($stock > 0 && $stock < $amount) {
-            $type = 'part-closed';
-        }
+        $type = $this->statusSelector($amount, $stock);
 
         $offer->setOrderType($type);
         $this->offerRepository->save($offer, true);
@@ -65,5 +54,22 @@ class OfferService
         if ($offer->getOrderType() === 'draft') {
             $this->offerRepository->remove($offer, true);
         }
+    }
+
+    public function statusSelector(?float $amount, ?float $stock): string
+    {
+        if ($stock === $amount) {
+            $type = 'draft';
+        }
+
+        if ($stock === 0) {
+            $type = 'close';
+        }
+
+        if ($stock > 0 && $stock < $amount) {
+            $type = 'part-closed';
+        }
+
+        return $type;
     }
 }
