@@ -14,10 +14,13 @@ class OfferServiceTest extends TestCase
         $offerRepository = $this->createMock(OfferRepository::class);
         $service = new OfferService($offerRepository);
         $result = $service->statusSelector(1, 1);
-        $result2 = $service->statusSelector(1, 0);
+        $result2 = $service->statusSelector(1.5, 0);
         $result3 = $service->statusSelector(2, 1);
         self::assertIsString($result);
         self::assertIsString($result2);
         self::assertIsString($result3);
+        self::assertEquals('draft', $result);
+        self::assertEquals('closed', $result2);
+        self::assertEquals('part-closed', $result3);
     }
 }

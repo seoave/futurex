@@ -58,12 +58,14 @@ class OfferService
 
     public function statusSelector(?float $amount, ?float $stock): string
     {
+        $type = '';
+
         if ($stock === $amount) {
             $type = 'draft';
         }
 
-        if ($stock === 0) {
-            $type = 'close';
+        if ($stock == 0) {
+            $type = 'closed';
         }
 
         if ($stock > 0 && $stock < $amount) {
