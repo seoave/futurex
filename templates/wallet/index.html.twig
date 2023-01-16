@@ -30,7 +30,7 @@
                                     <td>{{ token.name }}</td>
                                     <td>{{ token.amount }}</td>
                                     <td>
-                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        <a href="#" class="button
                                         is-warning">Exchange</a>
                                     </td>
                                 </tr>
@@ -40,8 +40,7 @@
                     {% else %}
                         <p>You have no tokens.</p>
                     {% endif %}
-                </section>
-                <section class="section">
+
                     <h3 class="is-size-5">Currencies</h3>
                     {% if currencies %}
                         <table class="table is-hoverable">
@@ -61,7 +60,7 @@
                                     <td>{{ currency.name }}</td>
                                     <td>{{ currency.amount }}</td>
                                     <td>
-                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        <a href="#" class="button
                                         is-warning">Withdraw</a>
                                     </td>
                                 </tr>
