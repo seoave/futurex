@@ -39,6 +39,21 @@ class WalletRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllUserFunds(int $userId, bool $isToken = false)
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT w.amount, c.code, c.name
+                 FROM App\Entity\Wallet w
+                 JOIN w.currency c
+                 WHERE w.owner = :userId AND c.token = :isToken'
+        )->setParameter('userId', $userId)
+            ->setParameter('isToken', $isToken);
+
+        return $query->getResult();
+    }
+
 //    /**
 //     * @return Wallet[] Returns an array of Wallet objects
 //     */
