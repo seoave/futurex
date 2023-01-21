@@ -42,7 +42,7 @@ class Offer
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->orderType = 'draft';
+        $this->stock = 'draft';
     }
 
     public function getId(): ?int
@@ -98,18 +98,6 @@ class Offer
         return $this;
     }
 
-    public function getOrderType(): ?string
-    {
-        return $this->orderType;
-    }
-
-    public function setOrderType(string $orderType): self
-    {
-        $this->orderType = $orderType;
-
-        return $this;
-    }
-
     public function getRate(): ?float
     {
         return $this->rate;
@@ -156,5 +144,21 @@ class Offer
         $this->exchangedCurrency = $exchangedCurrency;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string|null $status
+     */
+    public function setStatus(?string $status): void
+    {
+        $this->status = $status;
     }
 }

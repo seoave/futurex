@@ -9,6 +9,18 @@
                     <a href="/order/create" class="button is-primary">New order</a>
                 </div>
 
+                {% if message %}
+                    <article class="message is-warning">
+                        <div class="message-header">
+                            <p>Warning</p>
+                            <button class="delete" aria-label="delete"></button>
+                        </div>
+                        <div class="message-body">
+                            {{ message }}
+                        </div>
+                    </article>
+                {% endif %}
+
                 <div class="orders-list">
                     <h3 class="is-size-4">Matching orders</h3>
                     {% if matchingOffers %}
@@ -34,7 +46,7 @@
                             {% for matchOffer in matchingOffers %}
                                 <tr>
                                     <td>{{ loop.index }}</td>
-                                    <td>{{ matchOffer.orderType }}</td>
+                                    <td>{{ matchOffer.status }}</td>
                                     <td>{{ matchOffer.id }}</td>
                                     <td>{{ matchOffer.offerType }}</td>
                                     <td>{{ matchOffer.currency.name }}</td>
@@ -46,7 +58,7 @@
                                     <td>{{ matchOffer.user.id }}</td>
                                     <td>{{ matchOffer.user.id }}</td>
                                     <td>
-                                        {% if matchOffer.orderType == 'open' %}
+                                        {% if matchOffer.status == 'open' %}
                                             <a href="/order/checkout/match-{{ matchOffer.id }}/actual-28" class="button
                                             is-link">
                                                 Accept and Pay
@@ -87,7 +99,7 @@
                         {% for offer in offers %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ offer.orderType }}</td>
+                                <td>{{ offer.status }}</td>
                                 <td>{{ offer.id }}</td>
                                 <td>{{ offer.offerType }}</td>
                                 <td>{{ offer.currency.name }}</td>
@@ -98,14 +110,14 @@
                                 <td>{{ offer.createdAt | date("d/m/y H:i") }}</td>
                                 <td>{{ offer.user.id }}</td>
                                 <td>
-                                    {% if offer.orderType == 'draft' %}
+                                    {% if offer.status == 'draft' %}
                                         <a href="/order/open/{{ offer.id }}" class="button is-primary">Open</a>
                                     {% endif %}
-                                    {% if offer.orderType == 'open' %}
+                                    {% if offer.status == 'open' %}
                                         <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
                                         is-warning">Close</a>
                                     {% endif %}
-                                    {% if offer.orderType == 'draft' %}
+                                    {% if offer.status == 'draft' %}
                                         <a href="/order/delete/{{ offer.id }}" class="button is-danger">Delete</a>
                                     {% endif %}
                                 </td>

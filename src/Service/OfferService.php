@@ -12,18 +12,25 @@ class OfferService
     ) {
     }
 
-    public function open(int $id): void
+    public function open(int $id, int $userId): string
     {
         $offer = $this->offerRepository->find($id);
+        $openOffer = $this->offerRepository->findOneByOpen($userId);
 
         if ($offer === null) {
-            return;
+            return 'Offer does not exist';
         }
 
-        if ($offer->getOrderType() === 'draft') {
-            $offer->setOrderType('open');
+        if ($openOffer !== null) {
+            return 'You can have only 1 open offer in time. Close other offer to open another one';
+        }
+
+        if ($offer->getStatus() === 'draft') {
+            $offer->setStatus('open');
             $this->offerRepository->save($offer, true);
         }
+
+        return 'Order have been opened';
     }
 
     public function close(int $id): void
@@ -39,7 +46,7 @@ class OfferService
 
         $type = $this->statusSelector($amount, $stock);
 
-        $offer->setOrderType($type);
+        $offer->setStatus($type);
         $this->offerRepository->save($offer, true);
     }
 
@@ -51,7 +58,7 @@ class OfferService
             return;
         }
 
-        if ($offer->getOrderType() === 'draft') {
+        if ($offer->getStatus() === 'draft') {
             $this->offerRepository->remove($offer, true);
         }
     }
