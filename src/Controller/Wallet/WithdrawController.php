@@ -60,13 +60,12 @@ class WithdrawController extends AbstractController
                 $em->flush();
 
                 return $this->redirectToRoute('app_user_wallet_view');
-
             }
 
             $errorMessage = 'There is not enough money. Reduce amount or choose another currency.';
         }
 
-        return $this->render('wallet/add-funds.html.twig', [
+        return $this->render('wallet/withdraw.html.twig', [
             'title' => 'Withdraw',
             'form' => $form->createView(),
             'errorMessage' => $errorMessage,

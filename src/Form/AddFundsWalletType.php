@@ -68,7 +68,6 @@ class AddFundsWalletType extends AbstractType
             ])
             ->add('send', SubmitType::class, [
                 'attr' => ['class' => 'button is-primary'],
-                'label' => 'Add funds',
                 'row_attr' => ['class' => 'field'],
             ]);
     }

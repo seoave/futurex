@@ -5,6 +5,10 @@
             <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
             <div class="col1">
 
+                {% if errorMessage %}
+                    <p class="has-text-danger">{{ errorMessage }}</p>
+                {% endif %}
+
                 {{ form_start(form) }}
 
                 <div class="field">
