@@ -22,9 +22,13 @@ class UserTrading extends AbstractController
         $message = $request->query->get('message') ?: '';
         $userId = 9; // TODO get current user id from session
         $repository = $this->em->getRepository(Offer::class);
+
         $offers = $repository->findBy([], ['id' => 'ASC']);
-        $openOffer = $repository->findOneByOpen(9);
-        $matchingOffers = $repository->findAllEqualOrLessThanRate(5000, 'buy');
+        $openOffer = $repository->findOneByOpen($userId);
+
+        if ($openOffer) {
+            $matchingOffers = $repository->findAllEqualOrLessThanRate($openOffer->getRate(), $openOffer->getOfferType());
+        }
 
         return $this->render('trade/index.html.twig', [
             'title' => 'Trade',

@@ -19,7 +19,7 @@ class OpenOfferController extends AbstractController
     #[Route('/order/open/{id}', name: 'app_order_open')]
     public function open(int $id): RedirectResponse
     {
-        $userId = 9; // TODO get current user id from session
+        $userId = 11; // TODO get current user id from session
         $message = $this->service->open($id, $userId);
 
         return $this->redirectToRoute('trade', [

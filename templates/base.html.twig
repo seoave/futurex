@@ -86,6 +86,15 @@
     </nav>
 {% endblock %}
 <main class="main-content pt-3 pb-3">
+
+    <div class="messages">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+
     {% block body %}
         <section class="section">
             <h1 class="title has-text-centered">{{ title }}</h1>

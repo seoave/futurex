@@ -59,7 +59,8 @@
                                     <td>{{ matchOffer.user.id }}</td>
                                     <td>
                                         {% if matchOffer.status == 'open' %}
-                                            <a href="/order/checkout/match-{{ matchOffer.id }}/actual-28" class="button
+                                            <a href="/order/checkout/match-{{ matchOffer.id }}/actual-{{ openOffer.id }}"
+                                               class="button
                                             is-link">
                                                 Accept and Pay
                                             </a>
