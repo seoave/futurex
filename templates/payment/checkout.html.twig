@@ -5,13 +5,48 @@
             <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
             <div class="col1">
 
-                <div class="buttons">
-                    <a href="#" class="button is-primary">Add to deposit</a>
-                    <a href="#" class="button is-primary">Take from deposit</a>
+                <div class="order-info">
+                    <div class="notification is-primary is-light mt-6">
+                        <p>You will <span class="is-uppercase is-bold is-size-3 pl-3 pr-2">{{ actualOffer.offerType
+                                }}</span>
+                            tokens with follow conditions:
+                        </p>
+                    </div>
+                </div>
 
-                    {{ match }}
+                <div class="order-details is-flex is-justify-content-center mt-6 mb-6">
+                    {% if matchOffer %}
+                        <table class="table is-hoverable">
+                            <caption>Order details</caption>
+                            <thead>
+                            <tr>
+                                <th>offer id</th>
+                                <th>token</th>
+                                <th>amount</th>
+                                <th>rate</th>
+                                <th>exchanged</th>
+                                <th>trader</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ matchOffer.id }}</td>
+                                <td>{{ matchOffer.currency.name }}</td>
+                                <td>{{ matchOffer.stock }}</td>
+                                <td>{{ matchOffer.rate }}</td>
+                                <td>{{ matchOffer.exchangedCurrency.name }}</td>
+                                <td>{{ matchOffer.user.name }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No order</p>
+                    {% endif %}
+                </div>
 
-                    {{ actual }}
+                <div class="buttons is-flex is-justify-content-center mb-6">
+                    <a href="#" class="button is-primary">Pay order</a>
+                    <a href="#" class="button is-danger is-light">Cancel</a>
                 </div>
 
             </div>
