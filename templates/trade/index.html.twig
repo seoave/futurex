@@ -6,7 +6,7 @@
             <div class="col1">
 
                 <div class="buttons">
-                    <a href="/order/create" class="button is-primary">Create order</a>
+                    <a href="/order/create" class="button is-primary">New order</a>
                 </div>
 
                 <div class="orders-list">
@@ -44,9 +44,11 @@
                                     <td>{{ matchOffer.exchangedCurrency.name }}</td>
                                     <td>{{ matchOffer.createdAt | date("d/m/y H:i") }}</td>
                                     <td>{{ matchOffer.user.id }}</td>
+                                    <td>{{ matchOffer.user.id }}</td>
                                     <td>
                                         {% if matchOffer.orderType == 'open' %}
-                                            <a href="/order/pay/{{ matchOffer.id }}" class="button is-link">
+                                            <a href="/order/checkout/match-{{ matchOffer.id }}/actual-28" class="button
+                                            is-link">
                                                 Accept and Pay
                                             </a>
                                         {% endif %}

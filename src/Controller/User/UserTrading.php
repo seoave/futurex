@@ -19,7 +19,8 @@ class UserTrading extends AbstractController
     public function view(): Response
     {
         $repository = $this->em->getRepository(Offer::class);
-        $offers = $repository->findBy([], ['id' => 'DESC']);
+        $offers = $repository->findBy([], ['id' => 'ASC']);
+        $actualOffer = $repository->findOneBy();
         $matchingOffers = $repository->findAllEqualOrLessThanRate(5000, 'buy');
 
         return $this->render('trade/index.html.twig', [

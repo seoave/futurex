@@ -72,13 +72,13 @@ class OfferRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Offer
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findOneByOpenMinId($value): ?Offer
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', 'open')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult();
+    }
 }

@@ -26,7 +26,7 @@ class Offer
     #[Assert\Positive]
     private ?float $amount = null;
     #[ORM\Column(length: 10)]
-    private ?string $orderType = null;
+    private ?string $status = null;
     #[ORM\Column]
     #[Assert\Positive]
     private ?float $rate = null;
