@@ -23,7 +23,7 @@ class CheckoutController extends AbstractController
             $service->block($actualOffer);
         }
 
-        // TODO block timer
+        // TODO block/unblock timer
 
         return $this->render('payment/checkout.html.twig', [
             'title' => 'Checkout',

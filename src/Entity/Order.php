@@ -14,10 +14,6 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $acceptor = null;
-
     #[ORM\Column]
     private ?float $amount = null;
 
@@ -26,23 +22,15 @@ class Order
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Offer $offer = null;
+    private ?Offer $payerOffer = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Offer $recipientOffer = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAcceptor(): ?User
-    {
-        return $this->acceptor;
-    }
-
-    public function setAcceptor(?User $acceptor): self
-    {
-        $this->acceptor = $acceptor;
-
-        return $this;
     }
 
     public function getAmount(): ?float
@@ -69,14 +57,26 @@ class Order
         return $this;
     }
 
-    public function getOffer(): ?Offer
+    public function getPayerOffer(): ?Offer
     {
-        return $this->offer;
+        return $this->payerOffer;
     }
 
-    public function setOffer(?Offer $offer): self
+    public function setPayerOffer(?Offer $payerOffer): self
     {
-        $this->offer = $offer;
+        $this->payerOffer = $payerOffer;
+
+        return $this;
+    }
+
+    public function getRecipientOffer(): ?Offer
+    {
+        return $this->recipientOffer;
+    }
+
+    public function setRecipientOffer(?Offer $recipientOffer): self
+    {
+        $this->recipientOffer = $recipientOffer;
 
         return $this;
     }
