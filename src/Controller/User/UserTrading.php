@@ -16,7 +16,7 @@ class UserTrading extends AbstractController
     ) {
     }
 
-    #[Route('/trade', name: 'trade')]
+    #[Route('/trade', name: 'app_user_trade_view')]
     public function view(Request $request): Response
     {
         $message = $request->query->get('message') ?: '';
@@ -25,6 +25,7 @@ class UserTrading extends AbstractController
 
         $offers = $repository->findBy([], ['id' => 'ASC']);
         $openOffer = $repository->findOneByOpen($userId);
+        $matchingOffers = null;
 
         if ($openOffer) {
             $matchingOffers = $repository->findAllEqualOrLessThanRate($openOffer->getRate(), $openOffer->getOfferType());

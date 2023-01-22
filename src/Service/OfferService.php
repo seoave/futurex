@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Offer;
 use App\Repository\OfferRepository;
 
 class OfferService
@@ -61,6 +62,26 @@ class OfferService
         if ($offer->getStatus() === 'draft') {
             $this->offerRepository->remove($offer, true);
         }
+    }
+
+    public function block(Offer $offer): void
+    {
+        if ($offer === null) {
+            return;
+        }
+
+        $offer->setStatus('blocked');
+        $this->offerRepository->save($offer, true);
+    }
+
+    public function unBlock(Offer $offer): void
+    {
+        if ($offer === null) {
+            return;
+        }
+
+        $offer->setStatus('open');
+        $this->offerRepository->save($offer, true);
     }
 
     public function statusSelector(?float $amount, ?float $stock): string
