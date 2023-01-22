@@ -8,9 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PaymentController extends AbstractController
 {
-    #[Route('/order/pay/{id}', name: 'app_payment_order_view')]
-    public function view(int $id)
+    #[Route('/order/pay/{match}/{actual}', name: 'app_payment_order_view')]
+    public function view(int $match, int $actual)
     {
+
         return $this->render('payment/index.html.twig', [
             'title' => 'Payment',
         ]);
