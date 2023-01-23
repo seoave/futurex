@@ -5,6 +5,16 @@
             <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
             <div class="col1">
 
+                <div class="messages">
+                    {% for notice in app.flashes('notice') %}
+                        <div class="order-info">
+                            <div class="notification is-danger is-light mt-6">
+                                {{ notice }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
                 {% if matchOffer and actualOffer %}
                     <div class="order-info">
                         <div class="notification is-primary is-light mt-6">

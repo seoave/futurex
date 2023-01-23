@@ -56,10 +56,9 @@
                                     <td>{{ matchOffer.exchangedCurrency.name }}</td>
                                     <td>{{ matchOffer.createdAt | date("d/m/y H:i") }}</td>
                                     <td>{{ matchOffer.user.id }}</td>
-                                    <td>{{ matchOffer.user.id }}</td>
                                     <td>
                                         {% if matchOffer.status == 'open' %}
-                                            <a href="/order/checkout/match-{{ matchOffer.id }}/actual-{{ openOffer.id }}"
+                                            <a href="/order/checkout/{{ matchOffer.id }}/{{ openOffer.id }}"
                                                class="button
                                             is-link">
                                                 Accept and Pay
