@@ -7,12 +7,14 @@ use App\Entity\Currency;
 use App\Entity\Offer;
 use App\Entity\User;
 use App\Entity\Wallet;
+use App\Repository\WalletRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PaymentService
 {
     public function __construct(
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
+        private readonly WalletRepository $walletRepository,
     ) {
     }
 
@@ -55,17 +57,13 @@ class PaymentService
         $currencyCredit = $matchCurrencyWallet->getAmount() + $currencyDebit;
         $matchCurrencyWallet->setAmount($currencyCredit);
 
-        $wallets = [$matchTokenWallet, $actualTokenWallet, $actualCurrencyWallet, $matchCurrencyWallet];
-        $this->saveWalletsToDB($wallets);
-    }
-
-    private function saveWalletsToDB(array $wallets)
-    {
-        foreach ($wallets as $wallet) {
-            $this->em->persist($wallet);
-        }
-
-        $this->em->flush();
+        $wallets = [
+            $matchTokenWallet,
+            $actualTokenWallet,
+            $actualCurrencyWallet,
+            $matchCurrencyWallet,
+        ];
+        $this->walletRepository->saveMany($wallets);
     }
 
     private function getWallet(User $user, Currency $currencyId): ?Wallet
@@ -85,14 +83,17 @@ class PaymentService
 
         $matchAmount = $offers['match']->getAmount();
         $actualAmount = $offers['actual']->getAmount();
+        $matchUser = $offers['match']->getUser();
+        $actualUser = $offers['actual']->getUser();
+        $currency = $offers['actual']->getCurrency();
 
         $orderTokens = $matchAmount >= $actualAmount ? $actualAmount : $matchAmount;
         $orderMoney = $orderTokens * $offers['actual']->getRate();
 
-        $walletTokens = $this->getWallet($offers['match']->getUser(), $offers['actual']->getCurrency())
-            ->getAmount(); // Matched User Wallet
+        $walletTokens = $this->walletRepository->findWalletByCurrency($matchUser, $currency)
+            ->getAmount();// Matched User Wallet
 
-        $walletMoney = $this->getWallet($offers['actual']->getUser(), $offers['actual']->getCurrency())
+        $walletMoney = $this->walletRepository->findWalletByCurrency($actualUser, $currency)
             ->getAmount(); // Actual User Wallet
 
         if ($walletMoney !== $orderMoney) {

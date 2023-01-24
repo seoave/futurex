@@ -13,10 +13,11 @@ class PaymentController extends AbstractController
     #[Route('/order/pay/{match}/{actual}', name: 'app_payment_order_view')]
     public function view(int $match, int $actual, PaymentService $service): RedirectResponse
     {
-        $fundsValidation = $service->haveWalletsEnoughFunds($match, $actual);
+        $requiredFundsValidation = $service->haveWalletsEnoughFunds($match, $actual);
 
-        if (! $fundsValidation['isEnough']) {
-            $this->addFlash('notice', 'Not Enough funds: ' . $fundsValidation['message']);
+        if (! $requiredFundsValidation['isEnough']) {
+            $message = 'Not Enough funds: ' . $requiredFundsValidation['message'];
+            $this->addFlash('notice', $message);
 
             return $this->redirectToRoute('app_payment_checkout_index', [
                 'match' => $match,

@@ -14,7 +14,7 @@ class Wallet
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?float $amount = null;
+    private float $amount = 0.0;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -29,7 +29,7 @@ class Wallet
         return $this->id;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): float
     {
         return $this->amount;
     }
