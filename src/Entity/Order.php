@@ -26,6 +26,9 @@ class Order
     #[ORM\Column(length: 7, options: ['default' => 'draft'])]
     private ?string $status = 'draft';
 
+    #[ORM\Column]
+    private ?float $total = null;
+
     /**
      * @param \DateTimeImmutable|null $createdAt
      */
@@ -95,6 +98,18 @@ class Order
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): self
+    {
+        $this->total = $total;
 
         return $this;
     }

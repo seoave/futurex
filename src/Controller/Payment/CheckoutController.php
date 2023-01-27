@@ -26,7 +26,14 @@ class CheckoutController extends AbstractController
     public function index(int $match, int $actual): Response
     {
         $disabled = false;
+        $matchOffer = $this->offerRepository->find($match);
+        $actualOffer = $this->offerRepository->find($actual);
 
+        // create draft order
+        $draftOrder = $this->orderService::createOrder($actualOffer, $matchOffer);
+        dd($draftOrder);
+
+        // if both funds exists
         $requiredFundsValidation = $this->paymentService->haveWalletsEnoughFunds($match, $actual);
 
         if (! $requiredFundsValidation['isEnough']) {
@@ -35,18 +42,17 @@ class CheckoutController extends AbstractController
             $this->addFlash('notice', $message);
         }
 
-        $matchOffer = $this->offerRepository->find($match);
-        $actualOffer = $this->offerRepository->find($actual);
-
+        // block both offers
         if ($matchOffer && $actualOffer) {
             $this->offerService->block($matchOffer);
             $this->offerService->block($actualOffer);
         }
 
-        $draftOrder = $this->orderService::createOrder($actualOffer, $matchOffer);
-        dd($draftOrder);
+        // TODO save draft order to DB
 
-        // TODO block/unblock timer
+
+        // TODO block/unblock 15 min timer,
+        // TODO if not pay draft order and blocked offer will be canceled
 
         return $this->render('payment/checkout.html.twig', [
             'title' => 'Checkout',
