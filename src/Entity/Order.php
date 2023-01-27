@@ -13,20 +13,26 @@ class Order
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
     #[ORM\Column]
     private ?float $amount = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Offer $payerOffer = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Offer $recipientOffer = null;
+    #[ORM\Column(length: 7, options: ['default' => 'draft'])]
+    private ?string $status = 'draft';
+
+    /**
+     * @param \DateTimeImmutable|null $createdAt
+     */
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -77,6 +83,18 @@ class Order
     public function setRecipientOffer(?Offer $recipientOffer): self
     {
         $this->recipientOffer = $recipientOffer;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

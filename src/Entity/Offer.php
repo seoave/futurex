@@ -42,7 +42,7 @@ class Offer
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->stock = 'draft';
+        $this->status = 'draft';
     }
 
     public function getId(): ?int

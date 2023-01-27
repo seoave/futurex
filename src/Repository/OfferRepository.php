@@ -83,4 +83,15 @@ class OfferRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getOneOrNullResult();
     }
+
+    public function findTwoById(int $match, int $actual): array
+    {
+        $matchOffer = $this->find($match);
+        $actualOffer = $this->find($actual);
+
+        return [
+            'match' => $matchOffer,
+            'actual' => $actualOffer,
+        ];
+    }
 }

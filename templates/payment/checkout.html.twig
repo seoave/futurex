@@ -56,8 +56,12 @@
                     </div>
 
                     <div class="buttons is-flex is-justify-content-center mb-6">
-                        <a href="/order/pay/{{ matchOffer.id }}/{{ actualOffer.id }}" class="button is-primary">Pay
-                            order</a>
+                        <a href="/order/pay/{{ matchOffer.id }}/{{ actualOffer.id }}"
+                           class="button is-primary"
+                           {{ disabled }}
+                        >
+                            Pay order
+                        </a>
                         <a href="/order/cancel/match-{{ matchOffer.id }}/actual-{{ actualOffer.id }}" class="button
                         is-danger
                         is-light">Cancel</a>

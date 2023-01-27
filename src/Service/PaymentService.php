@@ -20,7 +20,7 @@ class PaymentService
 
     public function go(int $match, int $actual)
     {
-        $offers = $this->getOffers($match, $actual);
+        $offers = $this->em->getRepository(Offer::class)->findTwoById($match, $actual);
 
         $matchTokenWallet = $this->getWallet($offers['match']->getUser(), $offers['match']->getCurrency());
 
@@ -79,7 +79,7 @@ class PaymentService
         $message = '';
         $isEnough = true;
 
-        $offers = $this->getOffers($match, $actual);
+        $offers = $this->em->getRepository(Offer::class)->findTwoById($match, $actual);
 
         $matchAmount = $offers['match']->getAmount();
         $actualAmount = $offers['actual']->getAmount();
@@ -107,16 +107,5 @@ class PaymentService
         }
 
         return ['isEnough' => $isEnough, 'message' => $message];
-    }
-
-    public function getOffers(int $match, int $actual): array
-    {
-        $matchOffer = $this->em->getRepository(Offer::class)->find($match);
-        $actualOffer = $this->em->getRepository(Offer::class)->find($actual);
-
-        return [
-            'match' => $matchOffer,
-            'actual' => $actualOffer,
-        ];
     }
 }
