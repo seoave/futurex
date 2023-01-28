@@ -5,6 +5,7 @@ namespace App\Controller\Payment;
 
 use App\Entity\Order;
 use App\Repository\OfferRepository;
+use App\Repository\OrderRepository;
 use App\Service\OfferService;
 use App\Service\OrderService;
 use App\Service\PaymentService;
@@ -19,6 +20,7 @@ class CheckoutController extends AbstractController
         private readonly OfferRepository $offerRepository,
         private readonly OfferService $offerService,
         private readonly OrderService $orderService,
+        private readonly OrderRepository $orderRepository
     ) {
     }
 
@@ -30,11 +32,10 @@ class CheckoutController extends AbstractController
         $actualOffer = $this->offerRepository->find($actual);
 
         // create draft order
-        $draftOrder = $this->orderService::createOrder($actualOffer, $matchOffer);
-        dd($draftOrder);
+        $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
 
         // if both funds exists
-        $requiredFundsValidation = $this->paymentService->haveWalletsEnoughFunds($match, $actual);
+        $requiredFundsValidation = $this->paymentService->haveWalletsEnoughFunds($match, $actual, $draftOrder);
 
         if (! $requiredFundsValidation['isEnough']) {
             $disabled = true;
@@ -43,13 +44,11 @@ class CheckoutController extends AbstractController
         }
 
         // block both offers
-        if ($matchOffer && $actualOffer) {
+        if ($matchOffer && $actualOffer && $requiredFundsValidation['isEnough']) {
             $this->offerService->block($matchOffer);
             $this->offerService->block($actualOffer);
+            $this->orderRepository->save($draftOrder);
         }
-
-        // TODO save draft order to DB
-
 
         // TODO block/unblock 15 min timer,
         // TODO if not pay draft order and blocked offer will be canceled

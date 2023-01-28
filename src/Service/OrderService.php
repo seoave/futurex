@@ -8,13 +8,17 @@ use App\Entity\Order;
 
 class OrderService
 {
-    public static function createOrder(Offer $actualOffer, Offer $matchOffer): Order
+    public function createOrder(Offer $actualOffer, Offer $matchOffer): Order
     {
         $order = new Order();
         $order->setPayerOffer($actualOffer);
         $order->setRecipientOffer($matchOffer);
-        $amount = 0;
+
+        $amount = min($matchOffer->getAmount(), $actualOffer->getAmount());
         $order->setAmount($amount);
+
+        $total = $amount * $actualOffer->getRate();
+        $order->setTotal($total);
 
         return $order;
     }

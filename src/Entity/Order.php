@@ -19,13 +19,12 @@ class Order
     private ?\DateTimeImmutable $createdAt = null;
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Offer $payerOffer = null;
+    private ?Offer $initialOffer = null;
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Offer $recipientOffer = null;
+    private ?Offer $matchOffer = null;
     #[ORM\Column(length: 7, options: ['default' => 'draft'])]
     private ?string $status = 'draft';
-
     #[ORM\Column]
     private ?float $total = null;
 
@@ -66,28 +65,36 @@ class Order
         return $this;
     }
 
-    public function getPayerOffer(): ?Offer
+    /**
+     * @return Offer|null
+     */
+    public function getInitialOffer(): ?Offer
     {
-        return $this->payerOffer;
+        return $this->initialOffer;
     }
 
-    public function setPayerOffer(?Offer $payerOffer): self
+    /**
+     * @param Offer|null $initialOffer
+     */
+    public function setInitialOffer(?Offer $initialOffer): void
     {
-        $this->payerOffer = $payerOffer;
-
-        return $this;
+        $this->initialOffer = $initialOffer;
     }
 
-    public function getRecipientOffer(): ?Offer
+    /**
+     * @return Offer|null
+     */
+    public function getMatchOffer(): ?Offer
     {
-        return $this->recipientOffer;
+        return $this->matchOffer;
     }
 
-    public function setRecipientOffer(?Offer $recipientOffer): self
+    /**
+     * @param Offer|null $matchOffer
+     */
+    public function setMatchOffer(?Offer $matchOffer): void
     {
-        $this->recipientOffer = $recipientOffer;
-
-        return $this;
+        $this->matchOffer = $matchOffer;
     }
 
     public function getStatus(): ?string

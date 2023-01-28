@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\Currency;
 use App\Entity\Offer;
+use App\Entity\Order;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Repository\WalletRepository;
@@ -74,21 +75,23 @@ class PaymentService
         ]);
     }
 
-    public function haveWalletsEnoughFunds(int $match, int $actual): array
+    public function haveWalletsEnoughFunds(int $match, int $actual, Order $order): array
     {
         $message = '';
         $isEnough = true;
 
         $offers = $this->em->getRepository(Offer::class)->findTwoById($match, $actual);
 
-        $matchAmount = $offers['match']->getAmount();
-        $actualAmount = $offers['actual']->getAmount();
-        $matchUser = $offers['match']->getUser();
+         $matchUser = $offers['match']->getUser();
+       // $matchUser = $order->get
         $actualUser = $offers['actual']->getUser();
         $currency = $offers['actual']->getCurrency();
 
-        $orderTokens = $matchAmount >= $actualAmount ? $actualAmount : $matchAmount;
-        $orderMoney = $orderTokens * $offers['actual']->getRate();
+        //$orderTokens = $matchAmount >= $actualAmount ? $actualAmount : $matchAmount;
+        $orderTokens = $order->getAmount();
+        // $orderMoney = $orderTokens * $offers['actual']->getRate();
+        $orderMoney = $order->getTotal();
+
 
         $walletTokens = $this->walletRepository->findWalletByCurrency($matchUser, $currency)
             ->getAmount();// Matched User Wallet
@@ -96,12 +99,12 @@ class PaymentService
         $walletMoney = $this->walletRepository->findWalletByCurrency($actualUser, $currency)
             ->getAmount(); // Actual User Wallet
 
-        if ($walletMoney !== $orderMoney) {
+        if ($walletMoney < $orderMoney) {
             $message = 'No money';
             $isEnough = false;
         }
 
-        if ($walletTokens !== $orderTokens) {
+        if ($walletTokens < $orderTokens) {
             $message = 'No tokens';
             $isEnough = false;
         }

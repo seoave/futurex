@@ -22,7 +22,7 @@ class OpenOfferController extends AbstractController
         $userId = 11; // TODO get current user id from session
         $message = $this->service->open($id, $userId);
 
-        return $this->redirectToRoute('trade', [
+        return $this->redirectToRoute('app_user_trade_view', [
             'message' => $message,
         ]);
     }

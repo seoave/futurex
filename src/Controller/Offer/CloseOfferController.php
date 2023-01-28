@@ -20,6 +20,6 @@ class CloseOfferController extends AbstractController
     {
         $this->service->close($id);
 
-        return $this->redirectToRoute('trade');
+        return $this->redirectToRoute('app_user_trade_view');
     }
 }
