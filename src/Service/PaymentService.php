@@ -5,7 +5,6 @@ namespace App\Service;
 
 use App\Entity\Currency;
 use App\Entity\Offer;
-use App\Entity\Order;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Repository\WalletRepository;
@@ -73,36 +72,5 @@ class PaymentService
             'owner' => $user,
             'currency' => $currencyId,
         ]);
-    }
-
-    public function haveWalletsEnoughFunds(Order $order): array
-    {
-        $message = '';
-        $isEnough = true;
-
-        $matchUser = $order->getMatchOffer()->getUser();
-        $actualUser = $order->getInitialOffer()->getUser();
-        $currency = $order->getInitialOffer()->getCurrency();
-
-        $orderTokens = $order->getAmount();
-        $orderMoney = $order->getTotal();
-
-        $walletTokens = $this->walletRepository->findWalletByCurrency($matchUser, $currency)
-            ->getAmount();// Matched User Wallet
-
-        $walletMoney = $this->walletRepository->findWalletByCurrency($actualUser, $currency)
-            ->getAmount(); // Actual User Wallet
-
-        if ($walletMoney < $orderMoney) {
-            $message = 'No money';
-            $isEnough = false;
-        }
-
-        if ($walletTokens < $orderTokens) {
-            $message = 'No tokens';
-            $isEnough = false;
-        }
-
-        return ['isEnough' => $isEnough, 'message' => $message];
     }
 }

@@ -32,19 +32,22 @@ class CheckoutController extends AbstractController
         $actualOffer = $this->offerRepository->find($actual);
 
         // create draft order
-        $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
+        if ($matchOffer && $actualOffer) {
+            $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
+        }
 
         // if both funds exists
-        $requiredFundsValidation = $this->paymentService->haveWalletsEnoughFunds($draftOrder);
+        $fundsValidation = $this->orderService->isFundsValid($draftOrder);
 
-        if (! $requiredFundsValidation['isEnough']) {
+        // TODO refactor it
+        if (! $fundsValidation['isEnough']) {
             $disabled = true;
-            $message = 'Not Enough funds: ' . $requiredFundsValidation['message'];
+            $message = 'Not Enough funds: ' . $fundsValidation['message'];
             $this->addFlash('notice', $message);
         }
 
         // block both offers
-        if ($matchOffer && $actualOffer && $requiredFundsValidation['isEnough']) {
+        if ($matchOffer && $actualOffer && $fundsValidation['isEnough']) {
             $this->offerService->block($matchOffer);
             $this->offerService->block($actualOffer);
             $this->orderRepository->save($draftOrder);
@@ -57,6 +60,7 @@ class CheckoutController extends AbstractController
             'title' => 'Checkout',
             'matchOffer' => $matchOffer,
             'actualOffer' => $actualOffer,
+            'order' => $draftOrder,
             'disabled' => $disabled ? 'disabled' : '',
         ]);
     }

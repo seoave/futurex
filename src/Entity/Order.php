@@ -28,6 +28,9 @@ class Order
     #[ORM\Column]
     private ?float $total = null;
 
+    #[ORM\Column]
+    private ?float $rate = null;
+
     /**
      * @param \DateTimeImmutable|null $createdAt
      */
@@ -117,6 +120,18 @@ class Order
     public function setTotal(float $total): self
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getRate(): ?float
+    {
+        return $this->rate;
+    }
+
+    public function setRate(float $rate): self
+    {
+        $this->rate = $rate;
 
         return $this;
     }
