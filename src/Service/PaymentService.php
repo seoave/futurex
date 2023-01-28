@@ -75,8 +75,22 @@ class PaymentService
         ]);
     }
 
-    public function orderTransfer(Order $order)
+    public function orderTransfer(Order $order): bool
     {
+        if ($order->getInitialOffer() === null || $order->getMatchOffer() === null) {
+            return false;
+        }
+
         $type = $order->getInitialOffer()->getOfferType();
+
+        if ($type === 'buy') {
+            dd($type);
+        }
+
+        if ($type === 'sell') {
+            dd($type);
+        }
+
+        return true;
     }
 }
