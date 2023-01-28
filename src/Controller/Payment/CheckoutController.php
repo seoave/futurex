@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller\Payment;
 
-use App\Entity\Order;
 use App\Repository\OfferRepository;
 use App\Repository\OrderRepository;
 use App\Service\OfferService;
 use App\Service\OrderService;
-use App\Service\PaymentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class CheckoutController extends AbstractController
 {
     public function __construct(
-        private readonly PaymentService $paymentService,
         private readonly OfferRepository $offerRepository,
         private readonly OfferService $offerService,
         private readonly OrderService $orderService,
@@ -28,13 +25,24 @@ class CheckoutController extends AbstractController
     public function index(int $match, int $actual): Response
     {
         $disabled = false;
+        $newOrder = null;
         $matchOffer = $this->offerRepository->find($match);
         $actualOffer = $this->offerRepository->find($actual);
 
-        // create draft order
-        if ($matchOffer && $actualOffer) {
-            $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
+        if ($matchOffer === null) {
+            $this->addFlash('notice', 'Match offer not found');
+
+            return $this->redirectToRoute('app_user_trade_view');
         }
+
+        if ($actualOffer === null) {
+            $this->addFlash('notice', 'Current offer not found');
+
+            return $this->redirectToRoute('app_user_trade_view');
+        }
+
+        // create draft order
+        $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
 
         // if both funds exists
         $fundsValidation = $this->orderService->isFundsValid($draftOrder);
@@ -47,10 +55,16 @@ class CheckoutController extends AbstractController
         }
 
         // block both offers
-        if ($matchOffer && $actualOffer && $fundsValidation['isEnough']) {
+        if ($fundsValidation['isEnough']) {
             $this->offerService->block($matchOffer);
             $this->offerService->block($actualOffer);
-            $this->orderRepository->save($draftOrder);
+
+            $newOrder = $isOrderExists = $this->orderRepository->findOneByDraftOrder($draftOrder);
+
+            if ($isOrderExists === null) {
+                $this->orderRepository->save($draftOrder, true);
+                $newOrder = $draftOrder;
+            }
         }
 
         // TODO block/unblock 15 min timer,
@@ -60,7 +74,7 @@ class CheckoutController extends AbstractController
             'title' => 'Checkout',
             'matchOffer' => $matchOffer,
             'actualOffer' => $actualOffer,
-            'order' => $draftOrder,
+            'order' => $newOrder,
             'disabled' => $disabled ? 'disabled' : '',
         ]);
     }

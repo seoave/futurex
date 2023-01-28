@@ -39,6 +39,18 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
+    public function findOneByDraftOrder(Order $order): ?Order
+    {
+        return $this->findOneBy([
+            'amount' => $order->getAmount(),
+            'status' => $order->getStatus(),
+            'total' => $order->getTotal(),
+            'initialOffer' => $order->getInitialOffer(),
+            'matchOffer' => $order->getMatchOffer(),
+            'rate' => $order->getRate(),
+        ]);
+    }
+
 //    /**
 //     * @return Order[] Returns an array of Order objects
 //     */

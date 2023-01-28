@@ -39,7 +39,7 @@ class OrderService
 
         $matchUser = $order->getMatchOffer()?->getUser();
         $actualUser = $order->getInitialOffer()?->getUser();
-        $currency = $order->getInitialOffer()?->getCurrency();
+        $currency = $order->getInitialOffer()?->getExchangedCurrency();
 
         $orderTokens = $order->getAmount();
         $orderMoney = $order->getTotal();
@@ -49,8 +49,6 @@ class OrderService
 
         $walletMoney = $this->walletRepository->findWalletByCurrency($actualUser, $currency)
             ?->getAmount(); // Actual User Wallet
-
-        // dd($orderMoney);
 
         if ($walletMoney < $orderMoney) {
             $message = 'No money';

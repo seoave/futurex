@@ -74,6 +74,13 @@ class OfferService
         $this->offerRepository->save($offer, true);
     }
 
+    public function unBlockDraft(?Offer $offer): void
+    {
+        if ($offer && $offer->getStatus() === 'blocked') {
+            $this->unBlock($offer);
+        }
+    }
+
     public function unBlock(Offer $offer): void
     {
         if ($offer === null) {
