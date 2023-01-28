@@ -34,7 +34,7 @@ class Offer
     #[ORM\Column]
     private ?float $stock = null;
     #[ORM\Column(length: 10)]
-    private ?string $offerType = null;
+    private string $offerType;
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
@@ -123,7 +123,7 @@ class Offer
         return $this;
     }
 
-    public function getOfferType(): ?string
+    public function getOfferType(): string
     {
         return $this->offerType;
     }

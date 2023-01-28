@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\Currency;
 use App\Entity\Offer;
+use App\Entity\Order;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Repository\WalletRepository;
@@ -72,5 +73,10 @@ class PaymentService
             'owner' => $user,
             'currency' => $currencyId,
         ]);
+    }
+
+    public function orderTransfer(Order $order)
+    {
+        $type = $order->getInitialOffer()->getOfferType();
     }
 }
