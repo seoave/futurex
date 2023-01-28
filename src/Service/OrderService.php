@@ -24,7 +24,9 @@ class OrderService
         $order->setAmount($amount);
 
         $rate = min($actualOffer->getRate(), $matchOffer->getRate());
-        $total = $amount * $actualOffer->getRate();
+        $order->setRate($rate);
+
+        $total = $amount * $rate;
         $order->setTotal($total);
 
         return $order;
