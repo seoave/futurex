@@ -35,7 +35,7 @@ class CheckoutController extends AbstractController
         $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
 
         // if both funds exists
-        $requiredFundsValidation = $this->paymentService->haveWalletsEnoughFunds($match, $actual, $draftOrder);
+        $requiredFundsValidation = $this->paymentService->haveWalletsEnoughFunds($draftOrder);
 
         if (! $requiredFundsValidation['isEnough']) {
             $disabled = true;

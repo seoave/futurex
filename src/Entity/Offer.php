@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OfferRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,16 +18,16 @@ class Offer
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private DateTimeImmutable $createdAt;
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private ?Currency $currency = null;
+    private Currency $currency;
     #[ORM\Column]
     #[Assert\Positive]
     private ?float $amount = null;
     #[ORM\Column(length: 10)]
-    private ?string $status = null;
+    private string $status;
     #[ORM\Column]
     #[Assert\Positive]
     private ?float $rate = null;
@@ -37,11 +38,11 @@ class Offer
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private ?Currency $exchangedCurrency = null;
+    private Currency $exchangedCurrency;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
         $this->status = 'draft';
     }
 
@@ -62,31 +63,31 @@ class Offer
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCurrency(): ?Currency
+    public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    public function setCurrency(?Currency $currency): self
+    public function setCurrency(Currency $currency): self
     {
         $this->currency = $currency;
 
         return $this;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): float
     {
         return $this->amount;
     }
@@ -110,7 +111,7 @@ class Offer
         return $this;
     }
 
-    public function getStock(): ?float
+    public function getStock(): float
     {
         return $this->stock;
     }
@@ -134,30 +135,24 @@ class Offer
         return $this;
     }
 
-    public function getExchangedCurrency(): ?Currency
+    public function getExchangedCurrency(): Currency
     {
         return $this->exchangedCurrency;
     }
 
-    public function setExchangedCurrency(?Currency $exchangedCurrency): self
+    public function setExchangedCurrency(Currency $exchangedCurrency): self
     {
         $this->exchangedCurrency = $exchangedCurrency;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getStatus(): ?string
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string|null $status
-     */
-    public function setStatus(?string $status): void
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }

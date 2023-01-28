@@ -11,8 +11,8 @@ class OrderService
     public function createOrder(Offer $actualOffer, Offer $matchOffer): Order
     {
         $order = new Order();
-        $order->setPayerOffer($actualOffer);
-        $order->setRecipientOffer($matchOffer);
+        $order->setInitialOffer($actualOffer);
+        $order->setMatchOffer($matchOffer);
 
         $amount = min($matchOffer->getAmount(), $actualOffer->getAmount());
         $order->setAmount($amount);

@@ -75,23 +75,17 @@ class PaymentService
         ]);
     }
 
-    public function haveWalletsEnoughFunds(int $match, int $actual, Order $order): array
+    public function haveWalletsEnoughFunds(Order $order): array
     {
         $message = '';
         $isEnough = true;
 
-        $offers = $this->em->getRepository(Offer::class)->findTwoById($match, $actual);
+        $matchUser = $order->getMatchOffer()->getUser();
+        $actualUser = $order->getInitialOffer()->getUser();
+        $currency = $order->getInitialOffer()->getCurrency();
 
-         $matchUser = $offers['match']->getUser();
-       // $matchUser = $order->get
-        $actualUser = $offers['actual']->getUser();
-        $currency = $offers['actual']->getCurrency();
-
-        //$orderTokens = $matchAmount >= $actualAmount ? $actualAmount : $matchAmount;
         $orderTokens = $order->getAmount();
-        // $orderMoney = $orderTokens * $offers['actual']->getRate();
         $orderMoney = $order->getTotal();
-
 
         $walletTokens = $this->walletRepository->findWalletByCurrency($matchUser, $currency)
             ->getAmount();// Matched User Wallet
