@@ -3,93 +3,59 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Currency;
-use App\Entity\Offer;
 use App\Entity\Order;
-use App\Entity\User;
-use App\Entity\Wallet;
 use App\Repository\WalletRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 class PaymentService
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
         private readonly WalletRepository $walletRepository,
+        private readonly WalletService $walletService,
     ) {
-    }
-
-    public function go(int $match, int $actual)
-    {
-        $offers = $this->em->getRepository(Offer::class)->findTwoById($match, $actual);
-
-        $matchTokenWallet = $this->getWallet($offers['match']->getUser(), $offers['match']->getCurrency());
-
-        $actualTokenWallet = $this->getWallet($offers['actual']->getUser(), $offers['match']->getCurrency());
-
-        if ($matchTokenWallet === null || $actualTokenWallet === null) {
-            return $this->redirectToRoute('app_payment_checkout_index', [
-                'message' => 'Wallet not found, sorry',
-            ]);
-        }
-
-// TODO debit tokens from the account
-        $matchTokenWalletAmount = $matchTokenWallet->getAmount();
-        $matchTokenWallet->setAmount($matchTokenWalletAmount - $offers['match']->getAmount());
-
-// TODO credit the tokens to the account
-        $actualTokenWalletAmount = $actualTokenWallet->getAmount();
-        $actualTokenWallet->setAmount($actualTokenWalletAmount + $offers['match']->getAmount());
-
-// TODO debit money from the account
-        $matchCurrencyWallet = $this->getWallet($offers['match']->getUser(), $offers['match']->getExchangedCurrency());
-        $actualCurrencyWallet = $this->getWallet($offers['match']->getUser(), $offers['match']->getExchangedCurrency());
-
-        if ($matchCurrencyWallet === null || $actualCurrencyWallet === null) {
-            return $this->redirectToRoute('app_payment_checkout_index', [
-                'message' => 'Currency Wallets not found, sorry',
-            ]);
-        }
-
-        $actualCurrencyWalletAmount = $actualCurrencyWallet->getAmount();
-// TODO set debit token amount, example taken
-        $currencyDebit = $offers['match']->getAmount() * $offers['match']->getRate();
-        $actualCurrencyWallet->setAmount($actualCurrencyWalletAmount - $currencyDebit);
-        $currencyCredit = $matchCurrencyWallet->getAmount() + $currencyDebit;
-        $matchCurrencyWallet->setAmount($currencyCredit);
-
-        $wallets = [
-            $matchTokenWallet,
-            $actualTokenWallet,
-            $actualCurrencyWallet,
-            $matchCurrencyWallet,
-        ];
-        $this->walletRepository->saveMany($wallets);
-    }
-
-    private function getWallet(User $user, Currency $currencyId): ?Wallet
-    {
-        return $this->em->getRepository(Wallet::class)->findOneBy([
-            'owner' => $user,
-            'currency' => $currencyId,
-        ]);
     }
 
     public function orderTransfer(Order $order): bool
     {
-        if ($order->getInitialOffer() === null || $order->getMatchOffer() === null) {
+        $offer = $order->getInitialOffer();
+        if ($offer === null || $order->getMatchOffer() === null) {
             return false;
         }
 
-        $type = $order->getInitialOffer()->getOfferType();
+        $type = $offer->getOfferType();
+        $initialUser = $offer->getUser();
+        $recepientUser = $order->getMatchOffer()->getUser();
+        $token = $offer->getCurrency();
+        $money = $offer->getExchangedCurrency();
+        $tokensToTransfer = $order->getAmount();
+        $moneyToTransfer = $order->getTotal();
+
+        $wallets = [];
+        $tokenOptions = [
+            'currency' => $token,
+            'items' => $tokensToTransfer,
+        ];
+        $moneyOptions = [
+            'currency' => $money,
+            'items' => $moneyToTransfer,
+        ];
 
         if ($type === 'buy') {
-            dd($type);
+            $wallets['debitTokenWallet'] = $this->walletService->debit($recepientUser, $tokenOptions);
+            $wallets['creditTokenWallet'] = $this->walletService->credit($initialUser, $tokenOptions);
+
+            $wallets['debitMoneyWallet'] = $this->walletService->debit($initialUser, $moneyOptions);
+            $wallets['creditMoneyWallet'] = $this->walletService->credit($recepientUser, $moneyOptions);
         }
 
         if ($type === 'sell') {
-            dd($type);
+            $wallets['debitTokenWallet'] = $this->walletService->debit($initialUser, $tokenOptions);
+            $wallets['creditTokenWallet'] = $this->walletService->credit($recepientUser, $tokenOptions);
+
+            $wallets['debitMoneyWallet'] = $this->walletService->debit($recepientUser, $moneyOptions);
+            $wallets['creditMoneyWallet'] = $this->walletService->credit($initialUser, $moneyOptions);
         }
+
+        $this->walletRepository->saveMany($wallets);
 
         return true;
     }

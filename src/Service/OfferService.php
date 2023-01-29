@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Offer;
+use App\Entity\Order;
 use App\Repository\OfferRepository;
 
 class OfferService
@@ -45,7 +46,7 @@ class OfferService
         $amount = $offer->getAmount();
         $stock = $offer->getStock();
 
-        $type = $this->statusSelector($amount, $stock);
+        $type = $this->selectStatusByStock($amount, $stock);
 
         $offer->setStatus($type);
         $this->offerRepository->save($offer, true);
@@ -91,22 +92,48 @@ class OfferService
         $this->offerRepository->save($offer, true);
     }
 
-    public function statusSelector(?float $amount, ?float $stock): string
+    public function selectStatusByStock(?float $amount, ?float $stock): string
     {
-        $type = '';
+        $status = '';
 
         if ($stock === $amount) {
-            $type = 'draft';
+            $status = 'draft';
         }
 
         if ((int) $stock === 0) {
-            $type = 'closed';
+            $status = 'closed';
         }
 
         if ($stock > 0 && $stock < $amount) {
-            $type = 'part-closed';
+            $status = 'part-closed';
         }
 
-        return $type;
+        return $status;
+    }
+
+    public function updateOrderOffersStockAndStatus(Order $order): bool
+    {
+        $initOffer = $order->getInitialOffer();
+        $orderAmount = $order->getAmount();
+        $recipientOffer = $order->getMatchOffer();
+
+        if ($initOffer === null || $recipientOffer === null) {
+            return false;
+        }
+
+        $this->updateStockAndStatus($initOffer, $orderAmount);
+        $this->updateStockAndStatus($recipientOffer, $orderAmount);
+
+        return true;
+    }
+
+    public function updateStockAndStatus(Offer $offer, float $orderAmount)
+    {
+        $offerAmount = $offer->getAmount();
+        $updatedStock = $offerAmount - $orderAmount;
+        $offer->setStock($updatedStock);
+        $updatedStatus = $this->selectStatusByStock($offerAmount, $offer->getStock());
+        $offer->setStatus($updatedStatus);
+        $this->offerRepository->save($offer);
     }
 }

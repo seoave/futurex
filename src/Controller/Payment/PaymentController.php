@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller\Payment;
 
+use App\Repository\OfferRepository;
 use App\Repository\OrderRepository;
+use App\Service\OfferService;
 use App\Service\PaymentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,6 +16,8 @@ class PaymentController extends AbstractController
     public function __construct(
         private readonly OrderRepository $orderRepository,
         private readonly PaymentService $paymentService,
+        private readonly OfferService $offerService,
+        private readonly OfferRepository $offerRepository
     ) {
     }
 
@@ -24,24 +28,20 @@ class PaymentController extends AbstractController
 
         if ($order === null) {
             $this->addFlash('notice', 'Order not found');
-            $this->redirectToRoute('app_payment_checkout_index');
+            $this->redirectToRoute('app_payment_checkout_index'); // TODO check route
         }
 
-        // TODO process payments
-        // if fail - show message, go to checkout page
-        // if success - go to wallet
+        $transfer = $this->paymentService->orderTransfer($order);
 
-        $this->paymentService->orderTransfer($order);
+        if (! $transfer) {
+            $this->addFlash('notice', 'Transfer went wrong');
+            $this->redirectToRoute('app_payment_checkout_index'); // TODO check route
+        }
 
-        // TODO change tokens
+        $this->offerService->updateOrderOffersStockAndStatus($order);
 
-        // TODO change money
-
-        // TODO update init offer (stock & status)
-        // TODO update match offer (stock & status)
-
-        // TODO flush
-        // TODO order status to closed
+        $order->setStatus('closed');
+        $this->orderRepository->save($order);
 
         // return $this->redirectToRoute('app_user_wallet_view');
         return dd($id);

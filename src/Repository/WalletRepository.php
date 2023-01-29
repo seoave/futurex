@@ -50,11 +50,11 @@ class WalletRepository extends ServiceEntityRepository
         }
     }
 
-    public function findWalletByCurrency(User $user, Currency $currencyId): ?Wallet
+    public function findWalletByCurrency(User $user, Currency $currency): ?Wallet
     {
         return $this->getEntityManager()->getRepository(Wallet::class)->findOneBy([
             'owner' => $user,
-            'currency' => $currencyId,
+            'currency' => $currency,
         ]);
     }
 
