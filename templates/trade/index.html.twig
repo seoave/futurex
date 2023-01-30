@@ -112,13 +112,11 @@
                                 <td>
                                     {% if offer.status == 'draft' %}
                                         <a href="/order/open/{{ offer.id }}" class="button is-primary">Open</a>
-                                    {% endif %}
-                                    {% if offer.status == 'open' %}
-                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
-                                        is-warning">Close</a>
-                                    {% endif %}
-                                    {% if offer.status == 'draft' %}
                                         <a href="/order/delete/{{ offer.id }}" class="button is-danger">Delete</a>
+                                    {% endif %}
+                                    {% if offer.status == 'open' or offer.status == 'part-closed' %}
+                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        is-warning">To Draft</a>
                                     {% endif %}
                                 </td>
                             </tr>

@@ -35,7 +35,7 @@ class OfferService
         return 'Order have been opened';
     }
 
-    public function close(int $id): void
+    public function toDraft(int $id): void
     {
         $offer = $this->offerRepository->find($id);
 
@@ -43,13 +43,17 @@ class OfferService
             return;
         }
 
-        $amount = $offer->getAmount();
-        $stock = $offer->getStock();
+        $status = $offer->getStatus();
 
-        $type = $this->selectStatusByStock($amount, $stock);
+//        $amount = $offer->getAmount();
+//        $stock = $offer->getStock();
+//
+//        $type = $this->selectStatusByStock($amount, $stock);
 
-        $offer->setStatus($type);
-        $this->offerRepository->save($offer, true);
+        if ($status === 'open' || $status === 'part-closed') {
+            $offer->setStatus('draft');
+            $this->offerRepository->save($offer, true);
+        }
     }
 
     public function delete(int $id): void
@@ -129,11 +133,11 @@ class OfferService
 
     public function updateStockAndStatus(Offer $offer, float $orderAmount)
     {
-        $offerAmount = $offer->getAmount();
-        $updatedStock = $offerAmount - $orderAmount;
+        $offerStock = $offer->getStock();
+        $updatedStock = $offerStock - $orderAmount;
         $offer->setStock($updatedStock);
-        $updatedStatus = $this->selectStatusByStock($offerAmount, $offer->getStock());
+        $updatedStatus = $this->selectStatusByStock($offer->getAmount(), $offer->getStock());
         $offer->setStatus($updatedStatus);
-        $this->offerRepository->save($offer);
+        $this->offerRepository->save($offer, true);
     }
 }

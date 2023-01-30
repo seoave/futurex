@@ -20,7 +20,7 @@ class OrderService
         $order->setInitialOffer($actualOffer);
         $order->setMatchOffer($matchOffer);
 
-        $amount = min($matchOffer->getAmount(), $actualOffer->getAmount());
+        $amount = min($matchOffer->getStock(), $actualOffer->getStock());
         $order->setAmount($amount);
 
         $rate = min($actualOffer->getRate(), $matchOffer->getRate());

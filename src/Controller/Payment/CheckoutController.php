@@ -5,6 +5,7 @@ namespace App\Controller\Payment;
 
 use App\Repository\OfferRepository;
 use App\Repository\OrderRepository;
+use App\Service\CheckoutService;
 use App\Service\OfferService;
 use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +18,8 @@ class CheckoutController extends AbstractController
         private readonly OfferRepository $offerRepository,
         private readonly OfferService $offerService,
         private readonly OrderService $orderService,
-        private readonly OrderRepository $orderRepository
+        private readonly OrderRepository $orderRepository,
+        private readonly CheckoutService $checkoutService
     ) {
     }
 
@@ -29,22 +31,16 @@ class CheckoutController extends AbstractController
         $matchOffer = $this->offerRepository->find($match);
         $actualOffer = $this->offerRepository->find($actual);
 
-        if ($matchOffer === null) {
-            $this->addFlash('notice', 'Match offer not found');
+        $isValidOffers = $this->checkoutService->isValidOffers([$actualOffer, $matchOffer]);
+
+        if (! $isValidOffers) {
+            $this->addFlash('notice', 'Offers does not exist or closed');
 
             return $this->redirectToRoute('app_user_trade_view');
         }
 
-        if ($actualOffer === null) {
-            $this->addFlash('notice', 'Current offer not found');
-
-            return $this->redirectToRoute('app_user_trade_view');
-        }
-
-        // create draft order
         $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
 
-        // if both funds exists
         $fundsValidation = $this->orderService->isFundsValid($draftOrder);
 
         // TODO refactor it

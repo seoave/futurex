@@ -28,7 +28,9 @@ class UserTrading extends AbstractController
         $matchingOffers = null;
 
         if ($openOffer) {
-            $matchingOffers = $repository->findAllEqualOrLessThanRate($openOffer->getRate(), $openOffer->getOfferType());
+            $matchingOffers = $repository->findAllEqualOrLessThanRate(
+                $openOffer->getRate(), $openOffer->getOfferType()
+            );
         }
 
         return $this->render('trade/index.html.twig', [

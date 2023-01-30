@@ -17,7 +17,6 @@ class PaymentController extends AbstractController
         private readonly OrderRepository $orderRepository,
         private readonly PaymentService $paymentService,
         private readonly OfferService $offerService,
-        private readonly OfferRepository $offerRepository
     ) {
     }
 
@@ -28,22 +27,27 @@ class PaymentController extends AbstractController
 
         if ($order === null) {
             $this->addFlash('notice', 'Order not found');
-            $this->redirectToRoute('app_payment_checkout_index'); // TODO check route
+            $this->redirectToRoute('app_user_trade_view');
         }
+
+        $matchId = $order->getMatchOffer()->getId();
+        $actualId = $order->getInitialOffer()->getId();
+        $url = '/order/checkout/' . $matchId . '/' . $actualId;
 
         $transfer = $this->paymentService->orderTransfer($order);
 
         if (! $transfer) {
             $this->addFlash('notice', 'Transfer went wrong');
-            $this->redirectToRoute('app_payment_checkout_index'); // TODO check route
+            $this->redirect($url);
         }
 
-        $this->offerService->updateOrderOffersStockAndStatus($order);
+        $isOffersUpdated = $this->offerService->updateOrderOffersStockAndStatus($order);
 
-        $order->setStatus('closed');
-        $this->orderRepository->save($order);
+        if ($isOffersUpdated) {
+            $order->setStatus('closed');
+            $this->orderRepository->save($order, true);
+        }
 
-        // return $this->redirectToRoute('app_user_wallet_view');
-        return dd($id);
+        return $this->redirectToRoute('app_user_wallet_view');
     }
 }

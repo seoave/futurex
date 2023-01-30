@@ -74,24 +74,14 @@ class OfferRepository extends ServiceEntityRepository
 
     public function findOneByOpen(int $userId): ?Offer
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.user = :user')
-            ->andWhere('o.status = :status')
+        $qb = $this->createQueryBuilder('o');
+       return $qb->andWhere('o.user = :user')
+            ->andWhere('o.status = :open OR o.status = :part')
             ->setParameter('user', $userId)
-            ->setParameter('status', 'open')
+            ->setParameter('open', 'open')
+            ->setParameter('part', 'part-closed')
             ->getQuery()
             ->setMaxResults(1)
-            ->getOneOrNullResult();
-    }
-
-    public function findTwoById(int $match, int $actual): array
-    {
-        $matchOffer = $this->find($match);
-        $actualOffer = $this->find($actual);
-
-        return [
-            'match' => $matchOffer,
-            'actual' => $actualOffer,
-        ];
+           ->getOneOrNullResult();
     }
 }
