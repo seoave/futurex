@@ -13,36 +13,35 @@ class Order
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $acceptor = null;
-
     #[ORM\Column]
     private ?float $amount = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Offer $offer = null;
+    private ?Offer $initialOffer = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Offer $matchOffer = null;
+    #[ORM\Column(length: 7, options: ['default' => 'draft'])]
+    private ?string $status = 'draft';
+    #[ORM\Column]
+    private ?float $total = null;
+
+    #[ORM\Column]
+    private ?float $rate = null;
+
+    /**
+     * @param \DateTimeImmutable|null $createdAt
+     */
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAcceptor(): ?User
-    {
-        return $this->acceptor;
-    }
-
-    public function setAcceptor(?User $acceptor): self
-    {
-        $this->acceptor = $acceptor;
-
-        return $this;
     }
 
     public function getAmount(): ?float
@@ -69,14 +68,70 @@ class Order
         return $this;
     }
 
-    public function getOffer(): ?Offer
+    /**
+     * @return Offer|null
+     */
+    public function getInitialOffer(): ?Offer
     {
-        return $this->offer;
+        return $this->initialOffer;
     }
 
-    public function setOffer(?Offer $offer): self
+    /**
+     * @param Offer|null $initialOffer
+     */
+    public function setInitialOffer(?Offer $initialOffer): void
     {
-        $this->offer = $offer;
+        $this->initialOffer = $initialOffer;
+    }
+
+    /**
+     * @return Offer|null
+     */
+    public function getMatchOffer(): ?Offer
+    {
+        return $this->matchOffer;
+    }
+
+    /**
+     * @param Offer|null $matchOffer
+     */
+    public function setMatchOffer(?Offer $matchOffer): void
+    {
+        $this->matchOffer = $matchOffer;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): self
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    public function getRate(): ?float
+    {
+        return $this->rate;
+    }
+
+    public function setRate(float $rate): self
+    {
+        $this->rate = $rate;
 
         return $this;
     }

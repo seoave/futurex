@@ -48,7 +48,7 @@ class OfferRepository extends ServiceEntityRepository
         $query = $em->createQuery(
             'SELECT offer
                  FROM App\Entity\Offer offer
-                 WHERE offer.rate <= :rate AND offer.orderType = :open AND offer.offerType = :type
+                 WHERE offer.rate <= :rate AND offer.status = :open AND offer.offerType = :type
                  ORDER BY offer.rate ASC'
         )->setParameter('rate', $rate)
             ->setParameter('open', 'open')
@@ -72,13 +72,16 @@ class OfferRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Offer
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findOneByOpen(int $userId): ?Offer
+    {
+        $qb = $this->createQueryBuilder('o');
+       return $qb->andWhere('o.user = :user')
+            ->andWhere('o.status = :open OR o.status = :part')
+            ->setParameter('user', $userId)
+            ->setParameter('open', 'open')
+            ->setParameter('part', 'part-closed')
+            ->getQuery()
+            ->setMaxResults(1)
+           ->getOneOrNullResult();
+    }
 }

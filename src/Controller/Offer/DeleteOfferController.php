@@ -21,6 +21,6 @@ class DeleteOfferController extends AbstractController
     {
         $this->service->delete($id);
 
-        return $this->redirectToRoute('trade');
+        return $this->redirectToRoute('app_user_trade_view');
     }
 }

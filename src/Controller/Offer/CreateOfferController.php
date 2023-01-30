@@ -36,7 +36,7 @@ class CreateOfferController extends AbstractController
             $this->em->persist($offer);
             $this->em->flush();
 
-            return $this->redirectToRoute('trade');
+            return $this->redirectToRoute('app_user_trade_view');
         }
 
         return $this->render('order/index.html.twig', [
