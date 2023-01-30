@@ -3,36 +3,39 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity('email')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private $id;
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\Email]
-    private ?string $email = null;
+    private $email;
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $phone = null;
     #[ORM\Column(options: ['default' => 1])]
     private ?int $gender = null;
     #[ORM\Column]
-    private ?\DateTimeImmutable $bornAt = null;
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-    #[ORM\Column(length: 100, options: ['default' => 'trader'])]
-    private ?string $role = null;
+    private ?DateTimeImmutable $bornAt = null;
+    #[ORM\Column(type: 'string')]
+    private $password;
     #[ORM\Column(length: 5, nullable: true)]
     private ?string $language = null;
+    #[ORM\Column(type: 'json', nullable: true)]
+    private array $roles = [];
 
     public function getId(): ?int
     {
@@ -87,38 +90,32 @@ class User
         return $this;
     }
 
-    public function getBornAt(): ?\DateTimeImmutable
+    public function getBornAt(): ?DateTimeImmutable
     {
         return $this->bornAt;
     }
 
-    public function setBornAt(\DateTimeImmutable $bornAt): self
+    public function setBornAt(DateTimeImmutable $bornAt): self
     {
         $this->bornAt = $bornAt;
 
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        return $this->password;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
-    public function setPassword(string $password): self
+    public function setRoles(array $roles): self
     {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): self
-    {
-        $this->role = $role;
+        $this->roles = $roles;
 
         return $this;
     }
@@ -133,5 +130,33 @@ class User
         $this->language = $language;
 
         return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 }

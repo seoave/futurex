@@ -33,9 +33,7 @@ class AddFundsController extends AbstractController
             ]);
 
             if ($wallet === null) {
-                $newWallet = new Wallet();
-                $newWallet->setOwner($user);
-                $newWallet->setCurrency($currency);
+                $newWallet = new Wallet($user, $currency);
                 $newWallet->setAmount($formData['amount']);
                 $em->persist($newWallet);
             } else {

@@ -6,10 +6,22 @@
             <div class="col1">
 
                 <div class="buttons">
-                    <a href="/order/create" class="button is-primary">Create order</a>
+                    <a href="/order/create" class="button is-primary">New order</a>
                 </div>
 
-                <div class="orders-list">
+                {% if message %}
+                    <article class="message is-warning">
+                        <div class="message-header">
+                            <p>Warning</p>
+                            <button class="delete" aria-label="delete"></button>
+                        </div>
+                        <div class="message-body">
+                            {{ message }}
+                        </div>
+                    </article>
+                {% endif %}
+
+                <div class="orders-list mb-5">
                     <h3 class="is-size-4">Matching orders</h3>
                     {% if matchingOffers %}
                         <table class="table is-hoverable">
@@ -34,7 +46,7 @@
                             {% for matchOffer in matchingOffers %}
                                 <tr>
                                     <td>{{ loop.index }}</td>
-                                    <td>{{ matchOffer.orderType }}</td>
+                                    <td>{{ matchOffer.status }}</td>
                                     <td>{{ matchOffer.id }}</td>
                                     <td>{{ matchOffer.offerType }}</td>
                                     <td>{{ matchOffer.currency.name }}</td>
@@ -45,8 +57,10 @@
                                     <td>{{ matchOffer.createdAt | date("d/m/y H:i") }}</td>
                                     <td>{{ matchOffer.user.id }}</td>
                                     <td>
-                                        {% if matchOffer.orderType == 'open' %}
-                                            <a href="/order/pay/{{ matchOffer.id }}" class="button is-link">
+                                        {% if matchOffer.status == 'open' %}
+                                            <a href="/order/checkout/{{ matchOffer.id }}/{{ openOffer.id }}"
+                                               class="button
+                                            is-link">
                                                 Accept and Pay
                                             </a>
                                         {% endif %}
@@ -56,7 +70,7 @@
                             </tbody>
                         </table>
                     {% else %}
-                        <p>No matching orders</p>
+                        <p class="mt-2 is-italic">No matching orders</p>
                     {% endif %}
                 </div>
 
@@ -85,7 +99,7 @@
                         {% for offer in offers %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ offer.orderType }}</td>
+                                <td>{{ offer.status }}</td>
                                 <td>{{ offer.id }}</td>
                                 <td>{{ offer.offerType }}</td>
                                 <td>{{ offer.currency.name }}</td>
@@ -96,15 +110,13 @@
                                 <td>{{ offer.createdAt | date("d/m/y H:i") }}</td>
                                 <td>{{ offer.user.id }}</td>
                                 <td>
-                                    {% if offer.orderType == 'draft' %}
+                                    {% if offer.status == 'draft' %}
                                         <a href="/order/open/{{ offer.id }}" class="button is-primary">Open</a>
-                                    {% endif %}
-                                    {% if offer.orderType == 'open' %}
-                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
-                                        is-warning">Close</a>
-                                    {% endif %}
-                                    {% if offer.orderType == 'draft' %}
                                         <a href="/order/delete/{{ offer.id }}" class="button is-danger">Delete</a>
+                                    {% endif %}
+                                    {% if offer.status == 'open' or offer.status == 'part-closed' %}
+                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        is-warning">To Draft</a>
                                     {% endif %}
                                 </td>
                             </tr>

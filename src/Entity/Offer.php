@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OfferRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,34 +16,34 @@ class Offer
     private ?int $id = null;
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private User $user;
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private DateTimeImmutable $createdAt;
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private ?Currency $currency = null;
+    private Currency $currency;
     #[ORM\Column]
     #[Assert\Positive]
     private ?float $amount = null;
-    #[ORM\Column(length: 10)]
-    private ?string $orderType = null;
+    #[ORM\Column(length: 15)]
+    private string $status;
     #[ORM\Column]
     #[Assert\Positive]
     private ?float $rate = null;
     #[ORM\Column]
     private ?float $stock = null;
     #[ORM\Column(length: 10)]
-    private ?string $offerType = null;
+    private string $offerType;
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    private ?Currency $exchangedCurrency = null;
+    private Currency $exchangedCurrency;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->orderType = 'draft';
+        $this->createdAt = new DateTimeImmutable();
+        $this->status = 'draft';
     }
 
     public function getId(): ?int
@@ -50,43 +51,43 @@ class Offer
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCurrency(): ?Currency
+    public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    public function setCurrency(?Currency $currency): self
+    public function setCurrency(Currency $currency): self
     {
         $this->currency = $currency;
 
         return $this;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): float
     {
         return $this->amount;
     }
@@ -94,18 +95,6 @@ class Offer
     public function setAmount(float $amount): self
     {
         $this->amount = $amount;
-
-        return $this;
-    }
-
-    public function getOrderType(): ?string
-    {
-        return $this->orderType;
-    }
-
-    public function setOrderType(string $orderType): self
-    {
-        $this->orderType = $orderType;
 
         return $this;
     }
@@ -122,7 +111,7 @@ class Offer
         return $this;
     }
 
-    public function getStock(): ?float
+    public function getStock(): float
     {
         return $this->stock;
     }
@@ -134,7 +123,7 @@ class Offer
         return $this;
     }
 
-    public function getOfferType(): ?string
+    public function getOfferType(): string
     {
         return $this->offerType;
     }
@@ -146,15 +135,25 @@ class Offer
         return $this;
     }
 
-    public function getExchangedCurrency(): ?Currency
+    public function getExchangedCurrency(): Currency
     {
         return $this->exchangedCurrency;
     }
 
-    public function setExchangedCurrency(?Currency $exchangedCurrency): self
+    public function setExchangedCurrency(Currency $exchangedCurrency): self
     {
         $this->exchangedCurrency = $exchangedCurrency;
 
         return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 }

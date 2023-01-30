@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Offer;
+use App\Entity\Order;
 use App\Repository\OfferRepository;
 
 class OfferService
@@ -12,21 +14,28 @@ class OfferService
     ) {
     }
 
-    public function open(int $id): void
+    public function open(int $id, int $userId): string
     {
         $offer = $this->offerRepository->find($id);
+        $openOffer = $this->offerRepository->findOneByOpen($userId);
 
         if ($offer === null) {
-            return;
+            return 'Offer does not exist';
         }
 
-        if ($offer->getOrderType() === 'draft') {
-            $offer->setOrderType('open');
+        if ($openOffer !== null) {
+            return 'You can have only 1 open offer in time. Close other offer to open another one';
+        }
+
+        if ($offer->getStatus() === 'draft') {
+            $offer->setStatus('open');
             $this->offerRepository->save($offer, true);
         }
+
+        return 'Order have been opened';
     }
 
-    public function close(int $id): void
+    public function toDraft(int $id): void
     {
         $offer = $this->offerRepository->find($id);
 
@@ -34,13 +43,17 @@ class OfferService
             return;
         }
 
-        $amount = $offer->getAmount();
-        $stock = $offer->getStock();
+        $status = $offer->getStatus();
 
-        $type = $this->statusSelector($amount, $stock);
+//        $amount = $offer->getAmount();
+//        $stock = $offer->getStock();
+//
+//        $type = $this->selectStatusByStock($amount, $stock);
 
-        $offer->setOrderType($type);
-        $this->offerRepository->save($offer, true);
+        if ($status === 'open' || $status === 'part-closed') {
+            $offer->setStatus('draft');
+            $this->offerRepository->save($offer, true);
+        }
     }
 
     public function delete(int $id): void
@@ -51,27 +64,80 @@ class OfferService
             return;
         }
 
-        if ($offer->getOrderType() === 'draft') {
+        if ($offer->getStatus() === 'draft') {
             $this->offerRepository->remove($offer, true);
         }
     }
 
-    public function statusSelector(?float $amount, ?float $stock): string
+    public function block(Offer $offer): void
     {
-        $type = '';
+        if ($offer === null) {
+            return;
+        }
+
+        $offer->setStatus('blocked');
+        $this->offerRepository->save($offer, true);
+    }
+
+    public function unBlockDraft(?Offer $offer): void
+    {
+        if ($offer && $offer->getStatus() === 'blocked') {
+            $this->unBlock($offer);
+        }
+    }
+
+    public function unBlock(Offer $offer): void
+    {
+        if ($offer === null) {
+            return;
+        }
+
+        $offer->setStatus('open');
+        $this->offerRepository->save($offer, true);
+    }
+
+    public function selectStatusByStock(?float $amount, ?float $stock): string
+    {
+        $status = '';
 
         if ($stock === $amount) {
-            $type = 'draft';
+            $status = 'draft';
         }
 
         if ((int) $stock === 0) {
-            $type = 'closed';
+            $status = 'closed';
         }
 
         if ($stock > 0 && $stock < $amount) {
-            $type = 'part-closed';
+            $status = 'part-closed';
         }
 
-        return $type;
+        return $status;
+    }
+
+    public function updateOrderOffersStockAndStatus(Order $order): bool
+    {
+        $initOffer = $order->getInitialOffer();
+        $orderAmount = $order->getAmount();
+        $recipientOffer = $order->getMatchOffer();
+
+        if ($initOffer === null || $recipientOffer === null) {
+            return false;
+        }
+
+        $this->updateStockAndStatus($initOffer, $orderAmount);
+        $this->updateStockAndStatus($recipientOffer, $orderAmount);
+
+        return true;
+    }
+
+    public function updateStockAndStatus(Offer $offer, float $orderAmount)
+    {
+        $offerStock = $offer->getStock();
+        $updatedStock = $offerStock - $orderAmount;
+        $offer->setStock($updatedStock);
+        $updatedStatus = $this->selectStatusByStock($offer->getAmount(), $offer->getStock());
+        $offer->setStatus($updatedStatus);
+        $this->offerRepository->save($offer, true);
     }
 }
