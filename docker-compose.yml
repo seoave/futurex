@@ -9,6 +9,9 @@ services:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
     volumes:
       - php_socket:/var/run/php
     healthcheck:
@@ -39,6 +42,9 @@ services:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
     restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
     volumes:
       - php_socket:/var/run/php
       - caddy_data:/data
@@ -64,6 +70,9 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
       # You should definitely change the password in production
