@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="section">
+            <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
+            <div class="col1">
+
+                {% if errorMessage %}
+                    <p class="has-text-danger">{{ errorMessage }}</p>
+                {% endif %}
+
+                {{ form_start(form) }}
+
+                <div class="field">
+                    {{ form_label(form.currency) }}
+                    {{ form_errors(form.currency) }}
+                    <div class="select">
+                        {{ form_widget(form.currency) }}
+                    </div>
+                </div>
+
+                {{ form_row(form.amount) }}
+                {{ form_row(form.card) }}
+                {{ form_row(form.send) }}
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

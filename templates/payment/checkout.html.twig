@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="section">
+            <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
+            <div class="col1">
+
+                <div class="messages">
+                    {% for notice in app.flashes('notice') %}
+                        <div class="order-info">
+                            <div class="notification is-danger is-light mt-6">
+                                {{ notice }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if matchOffer and actualOffer %}
+                    <div class="order-info">
+                        <div class="notification is-primary is-light mt-6">
+                            <p>You will
+                                <span class="is-uppercase is-bold is-size-3 pl-3 pr-2">{{ actualOffer.offerType }}</span>
+                                tokens with follow conditions:
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="order-details is-flex is-justify-content-center mt-6 mb-6">
+                        {% if order %}
+                            <table class="table is-hoverable">
+                                <caption>Order details</caption>
+                                <thead>
+                                <tr>
+                                    <th>order id</th>
+                                    <th>amount</th>
+                                    <th>token</th>
+                                    <th>total</th>
+                                    <th>currency</th>
+                                    <th>trader</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{ order.id ? order.id : 'no id' }}</td>
+                                    <td>{{ matchOffer.currency.name }}</td>
+                                    <td>{{ order.amount }}</td>
+                                    <td>{{ order.total }}</td>
+                                    <td>{{ matchOffer.exchangedCurrency.name }}</td>
+                                    <td>{{ matchOffer.user.name }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>No order</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="buttons is-flex is-justify-content-center mb-6">
+                        {% if order.id %}
+                            <a href="/order/pay/{{ order.id }}"
+                               class="button is-primary"
+                            >
+                                Pay order
+                            </a>
+                        {% endif %}
+                        <a href="/order/cancel/{{ order.id }}" class="button
+                        is-danger
+                        is-light">Cancel</a>
+                    </div>
+
+                {% else %}
+                    <p>Something went wrong.</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

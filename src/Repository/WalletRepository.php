@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Currency;
+use App\Entity\User;
 use App\Entity\Wallet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,6 +32,15 @@ class WalletRepository extends ServiceEntityRepository
         }
     }
 
+    public function saveMany(array $wallets):void
+    {
+        foreach ($wallets as $wallet) {
+            $this->getEntityManager()->persist($wallet);
+        }
+
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(Wallet $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
@@ -37,6 +48,29 @@ class WalletRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findWalletByCurrency(User $user, Currency $currency): ?Wallet
+    {
+        return $this->getEntityManager()->getRepository(Wallet::class)->findOneBy([
+            'owner' => $user,
+            'currency' => $currency,
+        ]);
+    }
+
+    public function findAllUserFunds(int $userId, bool $isToken = false)
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT w.amount, c.code, c.name
+                 FROM App\Entity\Wallet w
+                 JOIN w.currency c
+                 WHERE w.owner = :userId AND c.token = :isToken'
+        )->setParameter('userId', $userId)
+            ->setParameter('isToken', $isToken);
+
+        return $query->getResult();
     }
 
 //    /**
