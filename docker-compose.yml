@@ -9,6 +9,12 @@ services:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
+    container_name: php8
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 300m
     volumes:
       - php_socket:/var/run/php
     healthcheck:
@@ -25,6 +31,12 @@ services:
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
   redis:
     image: redis:7.0.0
+    container_name: redis7
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 300m
     ports:
       - 6379
 
@@ -39,6 +51,12 @@ services:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
     restart: unless-stopped
+    container_name: caddy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 300m
     volumes:
       - php_socket:/var/run/php
       - caddy_data:/data
@@ -75,6 +93,12 @@ services:
       # - ./docker/db/data:/var/lib/postgresql/data:rw
     ports:
       - "9090:5432"
+    container_name: db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 300m
 ###< doctrine/doctrine-bundle ###
 
 volumes:
