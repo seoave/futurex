@@ -1,5 +1,11 @@
-hello:
-	echo "hello world"
+run:
+	service docker start
+
+status:
+	service docker status 
+
+chmod:
+	cd bin && chmod +x console && chmod +x phpunit
 
 in:
 	docker exec -it futurex-php-1 sh
