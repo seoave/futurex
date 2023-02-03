@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Currency;
 use App\Entity\User;
+use App\Factory\UserFactory;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -11,14 +13,14 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $user = new User();
-        $user->setName('Semen');
-        $user->setEmail('semen@mail.com');
-        $user->setGender(1);
-        $user->setBornAt(DateTimeImmutable::createFromFormat('d-m-Y', '01-02-1983'));
-        $user->setPassword('test');
+        //  UserFactory::createMany(10);
 
-        $manager->persist($user);
+        $currency = new Currency();
+        $currency->setCode('BTC');
+        $currency->setName('bitcoin');
+        $currency->setToken(true);
+
+        $manager->persist($currency);
         $manager->flush();
     }
 }
