@@ -25,3 +25,13 @@
     margin: 0 auto;
 }
 
+.field.checkbox-wr {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+}
+
+#registration_form_bornAt {
+    display: flex;
+}
+
