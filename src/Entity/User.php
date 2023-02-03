@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use DateTimeImmutable;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -13,28 +13,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity('email')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
     #[ORM\Column(length: 255)]
     private ?string $name = null;
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\Email]
-    private $email;
+    private string $email;
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $phone = null;
-    #[ORM\Column(options: ['default' => 1])]
+    #[ORM\Column(nullable: true, options: ['default' => 1])]
     private ?int $gender = null;
-    #[ORM\Column]
-    private ?DateTimeImmutable $bornAt = null;
+    #[ORM\Column(nullable: true)]
+    #[Assert\LessThan('-18 years')]
+    private ?DateTime $bornAt = null;
     #[ORM\Column(type: 'string')]
-    private $password;
+    private string $password;
     #[ORM\Column(length: 5, nullable: true)]
     private ?string $language = null;
-    #[ORM\Column(type: 'json', nullable: true)]
+    #[ORM\Column]
     private array $roles = [];
 
     public function getId(): ?int
@@ -90,12 +92,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getBornAt(): ?DateTimeImmutable
+    public function getBornAt(): ?DateTime
     {
         return $this->bornAt;
     }
 
-    public function setBornAt(DateTimeImmutable $bornAt): self
+    public function setBornAt(DateTime $bornAt): self
     {
         $this->bornAt = $bornAt;
 
@@ -147,7 +149,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // TODO: Implement eraseCredentials() method.
     }

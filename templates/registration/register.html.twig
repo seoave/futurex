@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <section>
+        <h1 class="is-size-1 has-text-centered mb-6">{{ title }}</h1>
+
+        <div class="register-login-form">
+            {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.name) }}
+
+            <div class="field">
+                {{ form_label(registrationForm.bornAt) }}
+                {{ form_errors(registrationForm.bornAt) }}
+                <div class="select">
+                    {{ form_widget(registrationForm.bornAt) }}
+                </div>
+            </div>
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword) }}
+            {{ form_row(registrationForm.agreeTerms) }}
+
+            {{ form_row(registrationForm.send) }}
+            {{ form_end(registrationForm) }}
+        </div>
+    </section>
+{% endblock %}
