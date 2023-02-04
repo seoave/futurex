@@ -1,84 +1,30 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="container">
-        <div class="section">
-            <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
-            <div class="col1">
+    <div class="section">
+        <h1 class="is-size-3 has-text-centered">{{ title }}</h1>
+        <div class="col1">
 
-                <div class="buttons">
-                    <a href="/order/create" class="button is-primary">New order</a>
-                </div>
+            <div class="buttons">
+                <a href="/order/create" class="button is-primary">New order</a>
+            </div>
 
-                {% if message %}
-                    <article class="message is-warning">
-                        <div class="message-header">
-                            <p>Warning</p>
-                            <button class="delete" aria-label="delete"></button>
-                        </div>
-                        <div class="message-body">
-                            {{ message }}
-                        </div>
-                    </article>
-                {% endif %}
+            {% if message %}
+                <article class="message is-warning">
+                    <div class="message-header">
+                        <p>Warning</p>
+                        <button class="delete" aria-label="delete"></button>
+                    </div>
+                    <div class="message-body">
+                        {{ message }}
+                    </div>
+                </article>
+            {% endif %}
 
-                <div class="orders-list mb-5">
-                    <h3 class="is-size-4">Matching orders</h3>
-                    {% if matchingOffers %}
-                        <table class="table is-hoverable">
-                            <caption>Total orders: {{ matchingOffers | length }}</caption>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>status</th>
-                                <th>offer id</th>
-                                <th>type</th>
-                                <th>token</th>
-                                <th>amount</th>
-                                <th>rate</th>
-                                <th>stock</th>
-                                <th>exchanged</th>
-                                <th>date</th>
-                                <th>user</th>
-                                <th>action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for matchOffer in matchingOffers %}
-                                <tr>
-                                    <td>{{ loop.index }}</td>
-                                    <td>{{ matchOffer.status }}</td>
-                                    <td>{{ matchOffer.id }}</td>
-                                    <td>{{ matchOffer.offerType }}</td>
-                                    <td>{{ matchOffer.currency.name }}</td>
-                                    <td>{{ matchOffer.amount }}</td>
-                                    <td>{{ matchOffer.rate }}</td>
-                                    <td>{{ matchOffer.stock }}</td>
-                                    <td>{{ matchOffer.exchangedCurrency.name }}</td>
-                                    <td>{{ matchOffer.createdAt | date("d/m/y H:i") }}</td>
-                                    <td>{{ matchOffer.user.id }}</td>
-                                    <td>
-                                        {% if matchOffer.status == 'open' %}
-                                            <a href="/order/checkout/{{ matchOffer.id }}/{{ openOffer.id }}"
-                                               class="button
-                                            is-link">
-                                                Accept and Pay
-                                            </a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p class="mt-2 is-italic">No matching orders</p>
-                    {% endif %}
-                </div>
-
-                <div class="orders-list">
-                    <h3 class="is-size-4">My orders</h3>
-
+            <div class="orders-list mb-5">
+                <h3 class="is-size-4">Matching orders</h3>
+                {% if matchingOffers %}
                     <table class="table is-hoverable">
-                        <caption>Total orders: {{ offers | length }}</caption>
+                        <caption>Total orders: {{ matchingOffers | length }}</caption>
                         <thead>
                         <tr>
                             <th>#</th>
@@ -96,36 +42,88 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for offer in offers %}
+                        {% for matchOffer in matchingOffers %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ offer.status }}</td>
-                                <td>{{ offer.id }}</td>
-                                <td>{{ offer.offerType }}</td>
-                                <td>{{ offer.currency.name }}</td>
-                                <td>{{ offer.amount }}</td>
-                                <td>{{ offer.rate }}</td>
-                                <td>{{ offer.stock }}</td>
-                                <td>{{ offer.exchangedCurrency.name }}</td>
-                                <td>{{ offer.createdAt | date("d/m/y H:i") }}</td>
-                                <td>{{ offer.user.id }}</td>
+                                <td>{{ matchOffer.status }}</td>
+                                <td>{{ matchOffer.id }}</td>
+                                <td>{{ matchOffer.offerType }}</td>
+                                <td>{{ matchOffer.currency.name }}</td>
+                                <td>{{ matchOffer.amount }}</td>
+                                <td>{{ matchOffer.rate }}</td>
+                                <td>{{ matchOffer.stock }}</td>
+                                <td>{{ matchOffer.exchangedCurrency.name }}</td>
+                                <td>{{ matchOffer.createdAt | date("d/m/y H:i") }}</td>
+                                <td>{{ matchOffer.user.id }}</td>
                                 <td>
-                                    {% if offer.status == 'draft' %}
-                                        <a href="/order/open/{{ offer.id }}" class="button is-primary">Open</a>
-                                        <a href="/order/delete/{{ offer.id }}" class="button is-danger">Delete</a>
-                                    {% endif %}
-                                    {% if offer.status == 'open' or offer.status == 'part-closed' %}
-                                        <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
-                                        is-warning">To Draft</a>
+                                    {% if matchOffer.status == 'open' %}
+                                        <a href="/order/checkout/{{ matchOffer.id }}/{{ openOffer.id }}"
+                                           class="button
+                                            is-link">
+                                            Accept and Pay
+                                        </a>
                                     {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                </div>
-
+                {% else %}
+                    <p class="mt-2 is-italic">No matching orders</p>
+                {% endif %}
             </div>
+
+            <div class="orders-list">
+                <h3 class="is-size-4">My orders</h3>
+
+                <table class="table is-hoverable">
+                    <caption>Total orders: {{ offers | length }}</caption>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>status</th>
+                        <th>offer id</th>
+                        <th>type</th>
+                        <th>token</th>
+                        <th>amount</th>
+                        <th>rate</th>
+                        <th>stock</th>
+                        <th>exchanged</th>
+                        <th>date</th>
+                        <th>user</th>
+                        <th>action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for offer in offers %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ offer.status }}</td>
+                            <td>{{ offer.id }}</td>
+                            <td>{{ offer.offerType }}</td>
+                            <td>{{ offer.currency.name }}</td>
+                            <td>{{ offer.amount }}</td>
+                            <td>{{ offer.rate }}</td>
+                            <td>{{ offer.stock }}</td>
+                            <td>{{ offer.exchangedCurrency.name }}</td>
+                            <td>{{ offer.createdAt | date("d/m/y H:i") }}</td>
+                            <td>{{ offer.user.id }}</td>
+                            <td>
+                                {% if offer.status == 'draft' %}
+                                    <a href="/order/open/{{ offer.id }}" class="button is-primary">Open</a>
+                                    <a href="/order/delete/{{ offer.id }}" class="button is-danger">Delete</a>
+                                {% endif %}
+                                {% if offer.status == 'open' or offer.status == 'part-closed' %}
+                                    <a href="{{ path('app_order_close', {'id': offer.id}) }}" class="button
+                                        is-warning">To Draft</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 {% endblock %}

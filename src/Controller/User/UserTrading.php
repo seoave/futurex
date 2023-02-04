@@ -16,7 +16,7 @@ class UserTrading extends AbstractController
     ) {
     }
 
-    #[Route('/trade', name: 'app_trade')]
+    #[Route('/my/trade', name: 'app_trade')]
     public function view(Request $request): Response
     {
         $message = $request->query->get('message') ?: '';
