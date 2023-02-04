@@ -1,0 +1,32 @@
+{# templates/home/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="section">
+        <h1 class="title has-text-centered is-size-2 mb-5">{{ title }}</h1>
+        <h2 class="subtitle has-text-centered mt-5 mb-5">
+            Token trading. Future Exchange.
+        </h2>
+
+        <div class="columns is-3 mt-5">
+            <div class="column has-background-primary-light mr-2">
+                <h4 class="has-text-weight-medium mb-2">Traders</h4>
+                {% if traders %}
+                    <p>
+                        {% for trader in traders %}
+                            {{ trader.firstName }} {{ trader.lastName }},
+                        {% endfor %}
+                    </p>
+                {% else %}
+                    <p>No traders. Become the first - <a href="{{ path('app_register') }}">Register</a></p>
+                {% endif %}
+            </div>
+            <div class="column has-background-danger-light mr-2">
+                <h4 class="has-text-weight-medium mb-2">Orders</h4>
+            </div>
+            <div class="column has-background-warning-light mr-2">
+                <h4 class="has-text-weight-medium mb-2">Funds</h4>
+            </div>
+        </div>
+    </section>
+{% endblock %}
