@@ -73,15 +73,18 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary" href="{{ path('app_register') }}">
-                            <strong>Sign up</strong>
-                        </a>
-                        <a class="button is-light" href="{{ path('login') }}">
-                            Log in
-                        </a>
-                        <a class="button is-light" href="{{ path('app_logout') }}">
-                            Logout
-                        </a>
+                        {% if app.user %}
+                            <a class="button is-light" href="{{ path('app_logout') }}">
+                                Logout
+                            </a>
+                        {% else %}
+                            <a class="button is-primary" href="{{ path('app_register') }}">
+                                <strong>Sign up</strong>
+                            </a>
+                            <a class="button is-light" href="{{ path('app_login') }}">
+                                Log in
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
