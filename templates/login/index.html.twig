@@ -1,40 +1,23 @@
-{% extends "base.html.twig" %}
+{# templates/login/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LoginController!{% endblock %}
+
 {% block body %}
-    <section>
-        <h1 class="is-size-1 has-text-centered mb-6">{{ title }}</h1>
-        <form id="loginNewUser" class="register-login-form" action="" method="post">
-            <div class="field">
-                <label for="loginEmail" class="label">Email</label>
-                <div class="control has-icons-left">
-                    <input id="loginEmail"
-                           name="loginEmail"
-                           class="input"
-                           type="email"
-                           placeholder="Your email"
-                           value="">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-envelope"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="field">
-                <label for="loginPassword" class="label">Password</label>
-                <div class="control has-icons-left">
-                    <input id="loginPassword"
-                           name="loginPassword"
-                           class="input"
-                           type="password"
-                    >
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-lock"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="field is-grouped mt-5">
-                <div class="control">
-                    <button class="button is-link">Login</button>
-                </div>
-            </div>
-        </form>
-    </section>
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form action="{{ path('app_login') }}" method="post">
+        <label for="username">Email:</label>
+        <input type="text" id="username" name="_username" value="{{ last_username }}">
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="_password">
+
+        {# If you want to control the URL the user is redirected to on success
+        <input type="hidden" name="_target_path" value="/account"> #}
+
+        <button type="submit">login</button>
+    </form>
 {% endblock %}

@@ -10,10 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LoginPageController extends AbstractController
 {
-    #[Route('/login', name: 'login')]
+    #[Route('/login_page', name: 'login')]
     public function login(): Response
     {
-        return $this->render('login/index.html.twig', [
+        return $this->render('login/index_login.html.twig', [
             'title' => 'Login',
         ]);
     }

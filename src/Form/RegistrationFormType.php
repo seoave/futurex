@@ -30,11 +30,17 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['class' => 'input'],
                 'label' => 'Email',
             ])
-            ->add('name', TextType::class, [
+            ->add('firstName', TextType::class, [
                 'row_attr' => ['class' => self::FIELD],
                 'label_attr' => ['class' => 'label'],
                 'attr' => ['class' => 'input'],
-                'label' => 'Name',
+                'label' => 'First name',
+            ])
+            ->add('lastName', TextType::class, [
+                'row_attr' => ['class' => self::FIELD],
+                'label_attr' => ['class' => 'label'],
+                'attr' => ['class' => 'input'],
+                'label' => 'Last name',
             ])
             ->add('bornAt', BirthdayType::class, [
                 'constraints' => [
