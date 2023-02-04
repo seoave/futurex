@@ -13,14 +13,15 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        //  UserFactory::createMany(10);
+        UserFactory::createOne(['email' => 'admin@admin.com']);
+        UserFactory::createMany(10);
 
-        $currency = new Currency();
-        $currency->setCode('BTC');
-        $currency->setName('bitcoin');
-        $currency->setToken(true);
-
-        $manager->persist($currency);
-        $manager->flush();
+//        $currency = new Currency();
+//        $currency->setCode('BTC');
+//        $currency->setName('bitcoin');
+//        $currency->setToken(true);
+//
+//        $manager->persist($currency);
+//        $manager->flush();
     }
 }
