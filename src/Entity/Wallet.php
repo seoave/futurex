@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WalletRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: WalletRepository::class)]
 class Wallet

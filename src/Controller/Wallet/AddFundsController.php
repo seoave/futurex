@@ -16,6 +16,8 @@ class AddFundsController extends AbstractController
     #[Route('/my/wallet/add', name: 'app_wallet_add')]
     public function view(Request $request, WalletRepository $walletRepository, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $form = $this->createForm(AddFundsWalletType::class);
 
         $form->handleRequest($request);

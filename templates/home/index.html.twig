@@ -27,7 +27,27 @@
                 <h4 class="has-text-weight-medium mb-2">Orders</h4>
             </div>
             <div class="column has-background-warning-light mr-2">
-                <h4 class="has-text-weight-medium mb-2">Funds</h4>
+                <h4 class="has-text-weight-medium mb-2">Total Futurex Funds</h4>
+                {% if currencies %}
+                    <ul>
+                        {% for key, currency in currencies %}
+                            <li>{{ key }}
+                                : {{ currency | format_number({grouping_used: 3,decimal_always_shown:true,
+                                    fraction_digit: 2}) }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if tokens %}
+                    <ul>
+                        {% for token in tokens %}
+                            <li>{{ token.currency.code }}: {{ token.amount }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if currencies is empty and tokens is empty %}
+                    <p>No funds. Become the first investor! - <a href="{{ path('app_register') }}">Register now
+                            and start trading!</a></p>
+                {% endif %}
             </div>
         </div>
     </section>
