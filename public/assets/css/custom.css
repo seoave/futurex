@@ -35,3 +35,10 @@
     display: flex;
 }
 
+.navbar-item.avatar .image img {
+    max-height: initial;
+}
+
+.main-menu {
+    height: 80px;
+}

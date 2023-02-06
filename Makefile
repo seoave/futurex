@@ -5,7 +5,7 @@ status:
 	service docker status 
 
 chmod:
-	cd bin && chmod +x console && chmod +x phpunit
+	cd .. && chmod -R a=wrx futurex && cd futurex
 
 in:
 	docker exec -it futurex-php-1 sh

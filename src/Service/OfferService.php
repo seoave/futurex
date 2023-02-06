@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Entity\Offer;
 use App\Entity\Order;
+use App\Entity\User;
 use App\Repository\OfferRepository;
 
 class OfferService
@@ -14,10 +15,10 @@ class OfferService
     ) {
     }
 
-    public function open(int $id, int $userId): string
+    public function open(int $id, User $user): string
     {
         $offer = $this->offerRepository->find($id);
-        $openOffer = $this->offerRepository->findOneByOpen($userId);
+        $openOffer = $this->offerRepository->findOneByOpen($user);
 
         if ($offer === null) {
             return 'Offer does not exist';

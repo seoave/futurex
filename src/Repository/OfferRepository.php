@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Offer;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -72,16 +73,17 @@ class OfferRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-    public function findOneByOpen(int $userId): ?Offer
+    public function findOneByOpen(User $user): ?Offer
     {
         $qb = $this->createQueryBuilder('o');
-       return $qb->andWhere('o.user = :user')
+
+        return $qb->andWhere('o.user = :user')
             ->andWhere('o.status = :open OR o.status = :part')
-            ->setParameter('user', $userId)
+            ->setParameter('user', $user)
             ->setParameter('open', 'open')
             ->setParameter('part', 'part-closed')
             ->getQuery()
             ->setMaxResults(1)
-           ->getOneOrNullResult();
+            ->getOneOrNullResult();
     }
 }

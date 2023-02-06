@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Offer;
 use App\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class DataTransformer
 {

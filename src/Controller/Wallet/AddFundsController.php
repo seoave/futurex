@@ -2,7 +2,6 @@
 
 namespace App\Controller\Wallet;
 
-use App\Entity\User;
 use App\Entity\Wallet;
 use App\Form\AddFundsWalletType;
 use App\Repository\WalletRepository;
@@ -17,6 +16,8 @@ class AddFundsController extends AbstractController
     #[Route('/my/wallet/add', name: 'app_wallet_add')]
     public function view(Request $request, WalletRepository $walletRepository, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $form = $this->createForm(AddFundsWalletType::class);
 
         $form->handleRequest($request);
@@ -24,12 +25,12 @@ class AddFundsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
             $currency = $formData['currency'];
-            $userId = 9;
-            $user = $em->getRepository(User::class)->find($userId);
+
+            $user = $this->getUser();
 
             $wallet = $walletRepository->findOneBy([
                 'currency' => $currency->getId(),
-                'owner' => $userId,
+                'owner' => $user,
             ]);
 
             if ($wallet === null) {
@@ -42,7 +43,7 @@ class AddFundsController extends AbstractController
 
             $em->flush();
 
-            return $this->redirectToRoute('app_user_wallet_view');
+            return $this->redirectToRoute('app_user_wallet');
         }
 
         return $this->render('wallet/add-funds.html.twig', [
