@@ -23,11 +23,12 @@ class PaymentController extends AbstractController
     #[Route('/order/pay/{id}', name: 'app_payment_order_view')]
     public function view(int $id): RedirectResponse
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $order = $this->orderRepository->find($id);
 
         if ($order === null) {
             $this->addFlash('notice', 'Order not found');
-            $this->redirectToRoute('app_user_trade_view');
+            $this->redirectToRoute('app_trade');
         }
 
         $matchId = $order->getMatchOffer()->getId();
@@ -48,6 +49,6 @@ class PaymentController extends AbstractController
             $this->orderRepository->save($order, true);
         }
 
-        return $this->redirectToRoute('app_user_wallet_view');
+        return $this->redirectToRoute('app_trade');
     }
 }

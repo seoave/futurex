@@ -21,8 +21,9 @@ class CreateOfferController extends AbstractController
     #[Route('/order/create')]
     public function view(Request $request): Response
     {
-        $repo = $this->em->getRepository(User::class);
-        $user = $repo->find(11);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
 
         $form = $this->createForm(CreateOfferFormType::class);
 
@@ -36,7 +37,7 @@ class CreateOfferController extends AbstractController
             $this->em->persist($offer);
             $this->em->flush();
 
-            return $this->redirectToRoute('app_user_trade_view');
+            return $this->redirectToRoute('app_trade');
         }
 
         return $this->render('order/index.html.twig', [

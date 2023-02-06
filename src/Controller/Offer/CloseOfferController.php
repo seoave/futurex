@@ -18,8 +18,10 @@ class CloseOfferController extends AbstractController
     #[Route('/order/close/{id}', name: 'app_order_close')]
     public function index(int $id): RedirectResponse
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $this->service->toDraft($id);
 
-        return $this->redirectToRoute('app_user_trade_view');
+        return $this->redirectToRoute('app_trade');
     }
 }

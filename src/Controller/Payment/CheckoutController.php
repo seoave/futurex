@@ -23,9 +23,11 @@ class CheckoutController extends AbstractController
     ) {
     }
 
-    #[Route('/order/checkout/{match}/{actual}', name: 'app_payment_checkout_index')]
+    #[Route('/my/order/checkout/{match}/{actual}', name: 'app_payment_checkout_index')]
     public function index(int $match, int $actual): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $disabled = false;
         $newOrder = null;
         $matchOffer = $this->offerRepository->find($match);
@@ -36,7 +38,7 @@ class CheckoutController extends AbstractController
         if (! $isValidOffers) {
             $this->addFlash('notice', 'Offers does not exist or closed');
 
-            return $this->redirectToRoute('app_user_trade_view');
+            return $this->redirectToRoute('app_trade');
         }
 
         $draftOrder = $this->orderService->createOrder($actualOffer, $matchOffer);
