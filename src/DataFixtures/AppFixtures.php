@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-//        UserFactory::createOne(['email' => 'admin@admin.com']);
+        UserFactory::createOne(['email' => 'su@admin.com', 'roles' => ['ROLE_SUPER_ADMIN']]);
 //        UserFactory::createMany(10);
 
 //        $currency = new Currency();
