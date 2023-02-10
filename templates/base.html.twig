@@ -104,6 +104,11 @@
                 <div class="navbar-item">
                     <div class="buttons are-small">
                         {% if app.user %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="button is-light" href="{{ path('admin') }}" target="_blank">
+                                    Admin
+                                </a>
+                            {% endif %}
                             <a class="button is-light" href="{{ path('app_logout') }}">
                                 Logout
                             </a>

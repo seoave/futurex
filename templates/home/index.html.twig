@@ -39,8 +39,8 @@
                 {% endif %}
                 {% if tokens %}
                     <ul>
-                        {% for token in tokens %}
-                            <li>{{ token.currency.code }}: {{ token.amount }}</li>
+                        {% for key, token in tokens %}
+                            <li>{{ key }}: {{ token }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
